@@ -1,37 +1,58 @@
 miro.onReady(() => {
   miro.initialize({
     extensionPoints: {
+      // bottomBar: {
+      //   title: 'Sticker to shapes',
+      //   svgIcon:
+      //     '<circle cx="12" cy="12" r="9" fill="none" fill-rule="evenodd" stroke="currentColor" stroke-width="2"/>',
+      //   positionPriority: 1,
+      //   onClick: async () => {
+      //     // Get selected widgets
+      //     let selectedWidgets = await miro.board.selection.get()
+
+      //     // Filter stickers from selected widgets
+      //     let stickers = selectedWidgets.filter((widget) => widget.type === 'STICKER')
+
+      //     // Delete selected stickers
+      //     await miro.board.widgets.deleteById(stickers.map((sticker) => sticker.id))
+
+      //     // Create shapes from selected stickers
+      //     await miro.board.widgets.create(
+      //       stickers.map((sticker) => ({
+      //         type: 'shape',
+      //         text: sticker.text,
+      //         x: sticker.x,
+      //         y: sticker.y,
+      //         width: sticker.bounds.width,
+      //         height: sticker.bounds.height,
+      //       })),
+      //     )
+
+      //     // Show success message
+      //     miro.showNotification('Stickers has been converted')
+      //   },
+      // },
       bottomBar: {
-        title: 'Sticker to shapes',
+        title: 'Board cleaner',
         svgIcon:
           '<circle cx="12" cy="12" r="9" fill="none" fill-rule="evenodd" stroke="currentColor" stroke-width="2"/>',
-        positionPriority: 1,
+        ositionPriority: 1,
         onClick: async () => {
-          // Get selected widgets
-          let selectedWidgets = await miro.board.selection.get()
+          // Show modal and wait for user choice
+          let needToClear = confirm('Do you want delete all content?')
 
-          // Filter stickers from selected widgets
-          let stickers = selectedWidgets.filter((widget) => widget.type === 'STICKER')
+          if (needToClear) {
+            // Get all board objects
+            let objects = await miro.board.widgets.get()
 
-          // Delete selected stickers
-          await miro.board.widgets.deleteById(stickers.map((sticker) => sticker.id))
+            // Delete all board objects
+            await miro.board.widgets.deleteById(objects.map((object) => object.id))
 
-          // Create shapes from selected stickers
-          await miro.board.widgets.create(
-            stickers.map((sticker) => ({
-              type: 'shape',
-              text: sticker.text,
-              x: sticker.x,
-              y: sticker.y,
-              width: sticker.bounds.width,
-              height: sticker.bounds.height,
-            })),
-          )
-
-          // Show success message
-          miro.showNotification('Stickers has been converted')
+            // Display success
+            miro.showNotification('Content has been deleted')
+          }
         },
-      },
+      },      
     },
   })
 })
