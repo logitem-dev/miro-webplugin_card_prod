@@ -38,12 +38,12 @@ miro.onReady(() => {
               }
               irow++;
 
-              if(icol == 1){
+              if(icol == 0){
                 x += sticker.bounds.width + 20;
-                icol = 0;
+                icol++;
               }else{
                 x = frame1[0].x + 20;
-                icol++;
+                icol = 0;
               }
             });
             miro.board.widgets.update(allStickers);
