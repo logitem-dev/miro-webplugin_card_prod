@@ -5,7 +5,7 @@ miro.onReady(() => {
     extensionPoints: {
       bottomBar: {
         title: 'Demo app button',
-        svgIcon: icon24,
+        svgIcon: 'some svg here',
         onClick: () => {
           alert('Bottom bar item has been clicked')
         }
