@@ -11,9 +11,9 @@ miro.onReady(() => {
         onClick: async () => {
 
           // 確認メッセージ表示
-          let confirm = confirm("ボードを初期化します。よろしいですか？");
+          let needToClear = confirm("ボードを初期化します。よろしいですか？");
 
-          if(confirm){
+          if(needToClear){
 
             // 全Stickerオブジェクトの取得
             let allStickers = await miro.board.widgets.get({type: 'sticker'})
