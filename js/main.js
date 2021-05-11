@@ -4,6 +4,13 @@ miro.onReady(() => {
   miro.initialize({
     extensionPoints: {
       bottomBar: {
+        title: 'Demo app button',
+        svgIcon: icon24,
+        onClick: () => {
+          alert('Bottom bar item has been clicked')
+        }
+      },
+      bottomBar: {
         title: 'Reset',
         svgIcon:
           '<circle cx="12" cy="12" r="9" fill="none" fill-rule="evenodd" stroke="currentColor" stroke-width="2"/>',
