@@ -29,8 +29,7 @@ miro.onReady(() => {
 
             // StickerオブジェクトをFrame1上に移動
             allStickers.forEach(sticker => {
-              sticker.x = x;
-              sticker.y = y;
+              await miro.boad.widgets.update({id: sticker.id, x: x, y: y});
 
               if(irow / 2 != 0){
                 y+=sticker.height + 20;
