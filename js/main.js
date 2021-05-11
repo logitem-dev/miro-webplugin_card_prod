@@ -1,15 +1,24 @@
 
 
 miro.onReady(() => {
+  const icon24 = 'some svg here'
+
   miro.initialize({
     extensionPoints: {
       bottomBar: {
         title: 'Demo app button',
-        svgIcon: 'some svg here',
+        svgIcon: icon24,
         onClick: () => {
           alert('Bottom bar item has been clicked')
         }
       },
+    }
+  })
+})
+
+miro.onReady(() => {
+  miro.initialize({
+    extensionPoints: {
       bottomBar: {
         title: 'Reset',
         svgIcon:
