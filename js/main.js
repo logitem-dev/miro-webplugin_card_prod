@@ -33,7 +33,7 @@ miro.onReady(() => {
               sticker.x = x;
               sticker.y = y;
 
-              if(irow / 2 != 0){
+              if(irow % 2 != 0){
                 y += sticker.bounds.height + 20;
               }
               irow++;
