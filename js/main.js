@@ -44,12 +44,12 @@ miro.onReady(() => {
                 x = frame1[0].x + 20;
               }
             });
+            miro.board.widgets.update(allStickers);
+
+            // Show success message
+            miro.showNotification('ボードを初期化しました。')  
           }
 
-          miro.board.widgets.update(allStickers);
-
-          // Show success message
-          miro.showNotification('ボードを初期化しました。')
         },
       },
     },
