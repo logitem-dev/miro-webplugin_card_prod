@@ -36,12 +36,14 @@ miro.onReady(() => {
               if(irow / 2 != 0){
                 y+=sticker.height + 20;
               }
+              irow++;
 
               if(icol == 1){
                 x+=sticker.width + 20;
                 icol = 0;
               }else{
                 x = frame1[0].x + 20;
+                icol++;
               }
             });
             miro.board.widgets.update(allStickers);
