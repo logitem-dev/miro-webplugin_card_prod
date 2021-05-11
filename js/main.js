@@ -34,12 +34,12 @@ miro.onReady(() => {
               sticker.y = y;
 
               if(irow / 2 != 0){
-                y = sticker.bounds.height + 20;
+                y += sticker.bounds.height + 20;
               }
               irow++;
 
               if(icol == 1){
-                x = sticker.bounds.width + 20;
+                x += sticker.bounds.width + 20;
                 icol = 0;
               }else{
                 x = frame1[0].x + 20;
