@@ -21,8 +21,8 @@ miro.onReady(() => {
             // 初期化位置の取得
             let frame1 = await miro.board.widgets.get({title: 'Frame 1'})
 
-            let x = frame1.x + 20;
-            let y = frame1.y + 80;
+            let x = frame1[0].x + 20;
+            let y = frame1[0].y + 80;
 
             let irow = 0;
             let icol = 0;
@@ -40,7 +40,7 @@ miro.onReady(() => {
                 x+=sticker.width + 20;
                 icol = 0;
               }else{
-                x = frame1.x + 20;
+                x = frame1[0].x + 20;
               }
             }
           }
