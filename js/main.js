@@ -28,7 +28,7 @@ miro.onReady(() => {
             let icol = 0;
 
             // StickerオブジェクトをFrame1上に移動
-            for(sticker in allStickers){
+            allStickers.forEach(sticker => {
               sticker.x = x;
               sticker.y = y;
 
@@ -42,7 +42,7 @@ miro.onReady(() => {
               }else{
                 x = frame1[0].x + 20;
               }
-            }
+            });
           }
 
           // Filter stickers from selected widgets
