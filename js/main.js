@@ -46,7 +46,7 @@ miro.onReady(() => {
             });
           }
 
-          await miro.boad.widgets.update(allStickers);          
+          miro.board.widgets.update(allStickers);
 
           // Show success message
           miro.showNotification('ボードを初期化しました。')
