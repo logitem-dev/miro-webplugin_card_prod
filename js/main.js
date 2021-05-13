@@ -8,46 +8,55 @@ miro.onReady(() => {
         positionPriority: 1,
         onClick: async () => {
 
-          // 確認メッセージ表示
-          let needToClear = confirm("ボードを初期化します。よろしいですか？");
 
-          if(needToClear){
+          miro.board.ui.openModal('createsticker.html', {title: 'アップロード'})
 
-            // 全Stickerオブジェクトの取得
-            let allStickers = await miro.board.widgets.get({type: 'sticker'})
+          // // 確認メッセージ表示
+          // let needToClear = confirm("ボードを初期化します。よろしいですか？");
 
-            // 初期化位置の取得
-            let frame1 = await miro.board.widgets.get({title: 'Frame 1'})
+          // if(needToClear){
 
-            let x = frame1[0].x + 20;
-            let y = frame1[0].y + 80;
+          //   // 全Stickerオブジェクトの取得
+          //   let allStickers = await miro.board.widgets.get({type: 'sticker'})
 
-            let irow = 0;
-            let icol = 0;
+          //   // 初期化位置の取得
+          //   let frame1 = await miro.board.widgets.get({title: 'Frame 1'})
 
-            // StickerオブジェクトをFrame1上に移動
-            allStickers.forEach(sticker => {
+          //   let groupIds = allStickers.filter(sticker=> typeof sticker.groupId != 'undefined').map(sticker=> sticker.groupId);
+
+          //   let groupobjects = await miro.board.widgets.get({groupId: groupIds[0]});
+
+          //   miro.board.selection.selectWidgets(groupobjects);
+
+//             let x = frame1[0].x - 120;
+//             let y = frame1[0].y - 260;
+
+//             let irow = 0;
+//             let icol = 0;
+
+//             // StickerオブジェクトをFrame1上に移動
+//             allStickers.forEach(sticker => {
               
-              sticker.x = x;
-              sticker.y = y;
+//               sticker.x = x;
+//               sticker.y = y;
 
-              if(irow % 2 != 0){
-                y += sticker.bounds.height + 20;
-              }
-              irow++;
+//               if(irow % 2 != 0){
+//                 y = (y + sticker.bounds.height);
+//               }
+//               irow++;
 
-              if(icol == 0){
-                x += sticker.bounds.width + 20;
-                icol++;
-              }else{
-                x = frame1[0].x + 20;
-                icol = 0;
-              }
-            });
-            miro.board.widgets.update(allStickers);
+//               if(icol == 0){
+//                 x += sticker.bounds.width + 20;
+//                 icol++;
+//               }else{
+//                 x = frame1[0].x - 120;
+//                 icol = 0;
+//               }
+//             });
+//            miro.board.widgets.update(allStickers);
 
             // Show success message
-            miro.showNotification('ボードを初期化しました。')  
+            // miro.showNotification('ボードを初期化しました。')  
           }
 
         },

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://miro.com/app/static/sdk.1.1.js"></script>
+    <script src="js/main.js"></script>
+
+    <link rel="stylesheet" href="src/styles.css" />
+
+    <body>
+        <div class="scrollable-container"></div>
+
+        <input type="file" id="selfile" accept='.jpg' required><br>
+        <img src="" name="image1"><br>
+
+        <textarea name="txt" id="userdata" rows="10" cols="40"></textarea>
+
+        <button id="submit" class="build-button" onclick='createSticker()'>アップロード</button><br>
+          
+        </div>
+
+        <script>
+            var obj1 = document.getElementById("selfile");
+            
+            //ダイアログでファイルが選択された時
+            obj1.addEventListener("change",function(evt){
+            
+                var imagefile = evt.target.files[0];
+
+	            var blobUrl = window.URL.createObjectURL(imagefile);
+
+                document.all.image1.src = blobUrl;
+            
+            },false);
+
+            function createSticker(){
+                
+                await miro.board.widgets.create({
+                    type: 'sticker',
+                    text: document.all.txt.text,
+                    width: 300,
+                    height: 200,
+                });
+
+                miro.board.ui.closeModal();
+            }
+
+            </script>        
+      </body>    
+    
+</head>
+</html>
