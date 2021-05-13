@@ -15,7 +15,7 @@
         <textarea name="txt" id="userdata" rows="10" cols="40"></textarea><br>
 
         <button id="submit" class="build-button" onclick='createSticker()'>アップロード</button>
-        <button id="close" class="build-button" onclick='miro.board.ui.closeModal()'>閉じる</button>
+        <button id="close" class="build-button" onclick='closeWindow()'>閉じる</button>
         <br>
           
         </div>
@@ -43,6 +43,10 @@
                     height: 200,
                 });
 
+                miro.board.ui.closeModal();
+            }
+
+            function closeWindow(){
                 miro.board.ui.closeModal();
             }
 
