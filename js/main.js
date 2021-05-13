@@ -57,7 +57,7 @@ miro.onReady(() => {
 
             // Show success message
             // miro.showNotification('ボードを初期化しました。')  
-          }
+//          }
 
         },
       },
