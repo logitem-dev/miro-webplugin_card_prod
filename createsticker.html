@@ -12,9 +12,11 @@
         <input type="file" id="selfile" accept='.jpg' required><br>
         <img src="" name="image1"><br>
 
-        <textarea name="txt" id="userdata" rows="10" cols="40"></textarea>
+        <textarea name="txt" id="userdata" rows="10" cols="40"></textarea><br>
 
-        <button id="submit" class="build-button" onclick='createSticker()'>アップロード</button><br>
+        <button id="submit" class="build-button" onclick='createSticker()'>アップロード</button>
+        <button id="close" class="build-button" onclick='miro.boad.ui.closeModal()'>閉じる</button>
+        <br>
           
         </div>
 
@@ -34,7 +36,7 @@
 
             function createSticker(){
                 
-                await miro.board.widgets.create({
+                miro.board.widgets.create({
                     type: 'sticker',
                     text: document.all.txt.text,
                     width: 300,
@@ -44,7 +46,7 @@
                 miro.board.ui.closeModal();
             }
 
-            </script>        
+        </script>        
       </body>    
     
 </head>
