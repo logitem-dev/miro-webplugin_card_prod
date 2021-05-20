@@ -8,8 +8,7 @@ miro.onReady(() => {
         positionPriority: 1,
         onClick: async () => {
 
-//			miro.board.ui.openModal('createsticker.html', { width: 350, height: 400 })
-			miro.board.ui.openLeftSidebar('sidebar.html');
+			miro.board.ui.openModal('createsticker.html', { width: 350, height: 400 })
 
         },
       },
