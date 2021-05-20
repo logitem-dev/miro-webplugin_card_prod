@@ -42,10 +42,11 @@
             }
 
             function createwidgets(){
-
+		
+		let stickerText = document.all.emploee_id.text + "<br"> + document.all.emploee_name.text + "<br>" + document.all.timetable.text + "<br><br><br><br>";
                 miro.board.widgets.create({
                     type: 'sticker',
-                    text: document.all.emploee_id.text + "<br"> + document.all.emploee_name.text + "<br>" + document.all.timetable.text + "<br><br><br><br>",
+                    text: stickerText,
                     scale: 0.85,
                     style: {stickerType:1, textAlign:'r', textAlignVertical:'t'}
                 });
