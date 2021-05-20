@@ -43,7 +43,7 @@
 
             function createwidgets(){
 		
-		var stickerText = document.all.emploee_id.text + "<br">;
+		var stickerText = document.all.emploee_id.value + "<br"> + document.all.emploee_name.value + "<br>" + document.all.timetable.value + "<br><br><br><br>";
                 miro.board.widgets.create({
                     type: 'sticker',
                     text: stickerText,
