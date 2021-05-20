@@ -1,52 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-    <script src="https://miro.com/app/static/sdk.1.1.js"></script>
-    <script src="js/main.js"></script>
-
-    <link rel="stylesheet" href="src/styles.css" />
-
+    <meta charset="utf-8"/>
     <body>
         <div class="scrollable-container"></div>
 
         <input type="file" id="selfile" accept='.jpg' required><br>
-        <img src="" name="image1"><br>
+        <img src="" name="image1" height='200' width='167'><br>
 
-        <textarea name="txt" id="userdata" rows="10" cols="40"></textarea><br>
+        従業員番号：<input type='text' name="emploee_id"><br>
+        従業員氏名：<input type='text' name="emploee_name"><br>
+        作業時間  ：<input type='text' name="timetable"><br>
 
-        <button id="submit" class="build-button" onclick='createSticker()'>アップロード</button>
-        <button id="close" class="build-button" onclick='closeWindow()'>閉じる</button>
+        <button type="button" onclick='createwidgets()'>アップロード</button>
+        <button id="close" onclick='closeWindow()'>閉じる</button>
         <br>
-          
+        
         </div>
 
         <script>
             var obj1 = document.getElementById("selfile");
+
+            var blobUrl;
             
-            //ダイアログでファイルが選択された時
+            //ダイアログでファイル選択時に画像を表示する
             obj1.addEventListener("change",function(evt){
             
                 var imagefile = evt.target.files[0];
 
-	            var blobUrl = window.URL.createObjectURL(imagefile);
+	            blobUrl = window.URL.createObjectURL(imagefile);
 
                 document.all.image1.src = blobUrl;
             
             },false);
 
-            function createSticker(){
-                
-                miro.board.widgets.create({
-                    type: 'sticker',
-                    text: document.all.txt.text,
-                    width: 300,
-                    height: 200,
-                });
-
+            function closeWindow(){
                 miro.board.ui.closeModal();
             }
 
-            function closeWindow(){
+            function createwidgets(){
+
+                miro.board.widgets.create({
+                    type: 'sticker',
+                    text: document.all.emploee_id.text + "<br"> + document.all.emploee_name.text + "<br>" + document.all.timetable.text + "<br><br><br><br>",
+                    scale: 0.85,
+                    style: {stickerType:1, textAlign:'r', textAlignVertical:'t'}
+                });
+
+                miro.board.widgets.create({
+                    type: 'image',
+                    url: blobUrl,
+                    scale: 0.85,
+                });                
+
                 miro.board.ui.closeModal();
             }
 

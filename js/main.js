@@ -8,14 +8,7 @@ miro.onReady(() => {
         positionPriority: 1,
         onClick: async () => {
 
-          //miro.board.ui.openModal('createsticker.html', {title: 'アップロード'})
-
-          miro.board.widgets.create({
-            type: 'sticker',
-            text: 'テスト',
-            width: 300,
-            height: 200,
-          });
+          miro.board.ui.openModal('createsticker.html', {title: 'アップロード'})
 
         },
       },
