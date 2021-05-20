@@ -22,15 +22,13 @@
 
         <script>
             var obj1 = document.getElementById("selfile");
-
-            var blobUrl;
             
             //ダイアログでファイル選択時に画像を表示する
             obj1.addEventListener("change",function(evt){
             
                 var imagefile = evt.target.files[0];
 
-	            blobUrl = window.URL.createObjectURL(imagefile);
+	        var blobUrl = window.URL.createObjectURL(imagefile);
 
                 document.all.image1.src = blobUrl;
             
@@ -52,7 +50,7 @@
 
                 miro.board.widgets.create({
                     type: 'image',
-                    url: blobUrl,
+                    url: document.all.image1.src,
                     scale: 0.85,
                 });                
 
