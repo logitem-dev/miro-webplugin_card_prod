@@ -43,15 +43,15 @@
 
             function createwidgets(){
 		
-		let stickerText = document.all.emploee_id.text + "<br"> + document.all.emploee_name.text + "<br>" + document.all.timetable.text + "<br><br><br><br>";
-                miro.board.widgets.create({
+		var stickerText = document.all.emploee_id.text + "<br"> + document.all.emploee_name.text + "<br>" + document.all.timetable.text + "<br><br><br><br>";
+                await miro.board.widgets.create({
                     type: 'sticker',
                     text: stickerText,
                     scale: 0.85,
                     style: {stickerType:1, textAlign:'r', textAlignVertical:'t'}
                 });
 
-                miro.board.widgets.create({
+                await miro.board.widgets.create({
                     type: 'image',
                     url: blobUrl,
                     scale: 0.85,
