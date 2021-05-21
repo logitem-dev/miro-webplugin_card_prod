@@ -122,13 +122,13 @@
             // Widgetを作成して画面を閉じる
             async function createWidgets(){
 		    
-		await concatCanvas();
+		        await concatCanvas();
 
-                const image1 = await getImagefromCanvas('canvas2');
+                const picUrl = document.getElementById('canvas2').getATtribute('data-image-url');
                         
                 miro.board.widgets.create({
                     type: 'image',
-                    url: url(image1),
+                    url: picUrl,
                     scale: 0.85,
                 });                
     
