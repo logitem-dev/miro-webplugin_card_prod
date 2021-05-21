@@ -2,63 +2,138 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8"/>
-    <script src="https://miro.com/app/static/sdk.1.1.js"></script>
-	
-    <body>
-        <div class="scrollable-container"></div>
+    <body onload="loadImage()">
+        <form method="post" action="http://localhost:9000/.netlify/functions/api">
+            <div class="scrollable-container"></div>
 
-        <input type="file" id="selfile" accept='.jpg' required><br>
-        <img src="" name="image1" height='200' width='167'><br>
+            <input type="file" name="selfile" accept='.jpg' required><br>
+            <canvas id = "canvas" width="450" height="250" style="background-color:rgb(255,255,172);"></canvas><br>
+            <!-- <img src="" name="image1" height='200' width='167'><br> -->
 
-        従業員番号：<input type='text' name="emploee_id"><br>
-        従業員氏名：<input type='text' name="emploee_name"><br>
-        作業時間  ：<input type='text' name="timetable"><br>
+            従業員番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 30)"><br>
+            従業員氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 90)"><br>
+            作業時間  ：<input type='text' name="timetable" onchange="drawText(this.name, 150)"><br>
 
-        <button type="button" onclick='createwidgets()'>アップロード</button>
-        <button id="close" onclick='closeWindow()'>閉じる</button>
-        <br>
-        
-        </div>
+            <canvas id = "canvas2" width="450" height="250""></canvas><br>
+
+            <button type="button" onclick='createWidgets()'>アップロード</button>
+            <button type="button" id="close" onclick='closeWindow()'>閉じる</button>
+            <br>
+            
+            </div>
+        </form>
 
         <script>
-            var obj1 = document.getElementById("selfile");
+
+        function loadImage(){
+            //画像を読み込んでImageオブジェクトを作成する
+            var image = new Image();
+            image.src = './image/sticker.png';
+            image.onload = (function () {
+                //画像ロードが完了してからキャンバスの準備をする
+                var canvas = document.getElementById('canvas2');
+                var ctx = canvas.getContext('2d');
+                //キャンバスのサイズを画像サイズに合わせる
+                canvas.width = image.width;
+                canvas.height = image.height;
+                //キャンバスに画像を描画（開始位置0,0）
+                ctx.drawImage(image, 0, 0);
+            });
+        }            
+
+            var obj1 = document.getElementsByName("selfile");
             
-            //ダイアログでファイル選択時に画像を表示する
-            obj1.addEventListener("change",function(evt){
-            
+            //ダイアログでファイル選択時にCanvas内に画像を表示する
+            obj1[0].addEventListener("change",function(evt){
+
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+
                 var imagefile = evt.target.files[0];
 
-	        var blobUrl = window.URL.createObjectURL(imagefile);
+	            var blobUrl = window.URL.createObjectURL(imagefile);
 
-                document.all.image1.src = blobUrl;
+                var image = new Image();
+                image.src = blobUrl;
+
+                image.addEventListener('load', function(){
+                    // 一旦写真の範囲をクリア
+                    clearPicture(context, 10, 10, 170, 210);                    
+                    context.drawImage(image,20,20, 167, 200);
+                }, false);
             
             },false);
 
+            // Canvas内に文字を表示する
+            function drawText(name, ypos){
+                var text = document.getElementsByName(name);
+
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+
+                context.font = '40px serif';
+                context.fillStyle = '#404040';
+                // 右寄せで表示
+                context.textBaseline = 'center';
+                context.textAlign = 'right';
+                //座標を指定して文字を描く
+                var x = (canvas.width -30);
+                var y = (canvas.offsetTop + ypos);
+                clearText(context, x-220, ypos);
+                context.fillText(text[0].value, x, y);                
+            }
+
+            // アップロード確定時にCanvasを合成する(編集用と確定用　編集用はクリア処理が入るため)
+            async function concatCanvas(){
+                const canvas = document.getElementById('canvas2');
+                const ctx = canvas.getContext("2d");
+
+                const image1 = await getImagefromCanvas('canvas');
+                ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
+            }
+
+            // Canvasオブジェクトからイメージを取得する
+            function getImagefromCanvas(id){
+                return new Promise((resolve, reject) => {
+                    const image = new Image();
+                    const ctx = document.getElementById(id).getContext("2d");
+                    image.onload = () => resolve(image);
+                    image.onerror = (e) => reject(e);
+                    image.src = ctx.canvas.toDataURL();
+                });                            
+            }
+
+            // 編集用のCanvasから文字をクリアする
+            function clearText(context, x,y){
+                context.clearRect(x, y, 300, 40);
+            }
+
+            // 編集用のCanvasから写真をクリアする
+            function clearPicture(context, x, y, width, height){
+                context.clearRect(x, y, width, height);
+            }
+
+            // 画面を閉じる
             function closeWindow(){
                 miro.board.ui.closeModal();
             }
 
-            function createwidgets(){
+            // Widgetを作成して画面を閉じる
+            function createWidgets(){
 		    
-		console.log(document.all.image1.src);
-		
-		var stickerText = document.all.emploee_id.value + "<br>" + document.all.emploee_name.value + "<br>" + document.all.timetable.value + "<br><br><br><br>";
-                miro.board.widgets.create({
-                    type: 'sticker',
-                    text: stickerText,
-                    scale: 0.85,
-                    style: {stickerType:1, textAlign:'r', textAlignVertical:'t'},
-		    capabilities: {'editable': false}
-                });
+                await concatCanvas();
 
+                const image1 = await getImagefromCanvas('canvas2');
+                        
                 miro.board.widgets.create({
                     type: 'image',
-                    url: 'https://logitem-dev.github.io/image000.jpg',
+                    url: url(image1),
                     scale: 0.85,
                 });                
-
+    
                 miro.board.ui.closeModal();
             }
+
 
         </script>        
       </body>    
