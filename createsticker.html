@@ -15,7 +15,7 @@
             従業員氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 90)"><br>
             作業時間  ：<input type='text' name="timetable" onchange="drawText(this.name, 150)"><br>
 
-            <canvas id = "canvas2" width="450" height="250"></canvas><br>
+            <canvas id = "canvas2" width="200" height="150"></canvas><br>
 		<!-- <img src="img/sticker.png" name="image1" height='200' width='167'> -->
 
             <button type="button" onclick='createWidgets()'>アップロード</button>
@@ -36,8 +36,8 @@
                 var canvas = document.getElementById('canvas2');
                 var ctx = canvas.getContext('2d');
                 //キャンバスのサイズを画像サイズに合わせる
-                canvas.width = image.width;
-                canvas.height = image.height;
+//                canvas.width = image.width;
+//                canvas.height = image.height;
                 //キャンバスに画像を描画（開始位置0,0）
                 ctx.drawImage(image, 0, 0);
             });
