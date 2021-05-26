@@ -29,13 +29,13 @@
     <input type="file" name="selfile" accept='.jpg' required><br>
 
     <div class="canvas-wrapper">
-	<canvas id = "canvas2" width="446" height="240"></canvas>
- 	<canvas id = "canvas" width="446" height="240" style="background-color:rgb(255,255,172);"></canvas><br>
+	<canvas id = "canvas2" width="446" height="250"></canvas>
+ 	<canvas id = "canvas" width="446" height="250"></canvas><br>
 
     <!-- <img src="" name="image1" height='200' width='167'><br> -->
 
-    	従業員番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 60)"><br>
-	従業員氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 110)"><br>
+    	従業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 60)"><br>
+	従業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 110)"><br>
 	作業時間  ：<input type='text' name="timetable" onchange="drawText(this.name, 160)"><br><br>
 
 	<input type='text' name='dataurl'><br>
@@ -109,7 +109,7 @@ miro.board.widgets.create({ type: 'image', url: blobUrl});
             //座標を指定して文字を描く
             var x = (canvas.width -30);
             var y = (canvas.offsetTop + ypos);
-       		clearText(context, x-220, ypos - 30);           // 範囲クリア位置調整
+       		clearText(context, x-220, ypos - 33);           // 範囲クリア位置調整
             context.fillText(text[0].value, x, y);                
         }
 
@@ -135,7 +135,7 @@ miro.board.widgets.create({ type: 'image', url: blobUrl});
 
         // 編集用のCanvasから文字をクリアする
         function clearText(context, x,y){
-            context.clearRect(x, y, 300, 40);
+            context.clearRect(x, y, 300, 45);
         }
 
         // 編集用のCanvasから写真をクリアする
@@ -168,7 +168,7 @@ miro.board.widgets.create({ type: 'image', url: blobUrl});
 
 	        document.forms[0].submit();
 
-	        //miro.board.ui.closeModal();
+	        miro.board.ui.closeModal();
         }
 
 
