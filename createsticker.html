@@ -23,7 +23,8 @@
 </head>
     
 <script src="https://miro.com/app/static/sdk.1.1.js"></script>
-<body onload="loadImage()">
+<body onload="onLoad()">
+<!-- <form method="post" action="http://localhost:5000/fileUpload">-->
 <form method="post" action="https://logitem.herokuapp.com/fileUpload">
 
     <input type="file" name="selfile" accept='.jpg' required><br>
@@ -34,8 +35,8 @@
 
     <!-- <img src="" name="image1" height='200' width='167'><br> -->
 
-    	従業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 60)"><br>
-	従業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 110)"><br>
+    	作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 60)"><br>
+	作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 110)"><br>
 	作業時間  ：<input type='text' name="timetable" onchange="drawText(this.name, 160)"><br><br>
 
 	<input type='text' name='dataurl'><br>
@@ -48,6 +49,19 @@
 
 
 <script>
+
+    async function onLoad(){
+
+	var url = new URL(window.location.href);
+	var params = url.searchParams;
+
+	if(!(params.get('emploee_id') == null || params.get('emploee_id') == '')){
+		await miro.board.widgets.create({ type: 'image', url: 'https://logitem.herokuapp.com/' + params.get('emploee_id') + '.png'});
+	}else{
+		loadImage();
+	}
+
+    }
 
     function loadImage(){
         //画像を読み込んでImageオブジェクトを作成する
@@ -162,8 +176,8 @@
                     return false;
                 }
             })
-		await miro.board.widgets.create({ type: 'image', url: 'https://logitem.herokuapp.com/12345566.png'});
-	        //document.forms[0].submit();
+            
+	        document.forms[0].submit();
 
         }
 
