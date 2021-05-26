@@ -24,7 +24,7 @@
     
 <script src="https://miro.com/app/static/sdk.1.1.js"></script>
 <body onload="loadImage()">
-<form method="post" action="http://localhost:9000/.netlify/functions/createFile">
+<form method="post" action="https://logitem.herokuapp.com/fileUpload">
 
     <input type="file" name="selfile" accept='.jpg' required><br>
 
@@ -166,7 +166,7 @@ miro.board.widgets.create({ type: 'image', url: blobUrl});
                 }
             })
 
-	//          document.forms[0].submit();
+	        document.forms[0].submit();
 
 	        miro.board.ui.closeModal();
         }
