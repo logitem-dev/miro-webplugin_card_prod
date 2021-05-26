@@ -56,7 +56,8 @@
 	var params = url.searchParams;
 
 	if(!(params.get('emploee_id') == null || params.get('emploee_id') == '')){
-		await miro.board.widgets.create({ type: 'image', url: 'https://logitem.herokuapp.com/' + params.get('emploee_id') + '.png'});
+		miro.broadcastData({emploee_id : params.get('emploee_id')});
+		miro.board.ui.closeModal();
 	}else{
 		loadImage();
 	}
