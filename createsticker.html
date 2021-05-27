@@ -24,8 +24,7 @@
     
 <script src="https://miro.com/app/static/sdk.1.1.js"></script>
 <body onload="loadImage()">
-<form method="post" action="http://localhost:5000/fileUpload">
-<!-- <form method="post" action="https://logitem.herokuapp.com/fileUpload"> -->
+<form>
 
     <input type="file" name="selfile" accept='.jpg' required><br>
 
@@ -49,19 +48,6 @@
 
 
 <script>
-
-//     async function onLoad(){
-
-// 	var url = new URL(window.location.href);
-// 	var params = url.searchParams;
-
-// 	if(!(params.get('emploee_id') == null || params.get('emploee_id') == '')){
-// //		await miro.board.widgets.create({ type: 'image', url: 'https://logitem.herokuapp.com/' + params.get('emploee_id') + '.png'});
-// 	}else{
-// 		loadImage();
-// 	}
-
-//     }
 
     function loadImage(){
         //画像を読み込んでImageオブジェクトを作成する
@@ -184,7 +170,7 @@
             // 合成された画像の一時ファイルを作成
             var emploee_id = document.getElementsByName("emploee_id")[0].value;
             var dataurl = document.getElementsByName('dataurl')[0].value;
-            fetch('http://localhost:5000/create', {
+            fetch('https://logitem.herokuapp.com/create', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -198,7 +184,7 @@
             });
 
             // Widgetの作成
-            await miro.board.widgets.create({ type: 'image', url: 'http://localhost:5000/' + emploee_id + '.png', metadata:{'3074457358567435973':{stafid:'1111', attendance: true}}});
+            await miro.board.widgets.create({ type: 'image', url: 'https://logitem.herokuapp.com/' + emploee_id + '.png', metadata:{'3074457358567435973':{stafid:'1111', attendance: true}}});
 
             // 一時ファイルの削除
 
