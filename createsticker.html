@@ -23,9 +23,9 @@
 </head>
     
 <script src="https://miro.com/app/static/sdk.1.1.js"></script>
-<body onload="onLoad()">
-<!-- <form method="post" action="http://localhost:5000/fileUpload">-->
-<form method="post" action="https://logitem.herokuapp.com/fileUpload">
+<body onload="loadImage()">
+<form method="post" action="http://localhost:5000/fileUpload">
+<!-- <form method="post" action="https://logitem.herokuapp.com/fileUpload"> -->
 
     <input type="file" name="selfile" accept='.jpg' required><br>
 
@@ -39,7 +39,7 @@
 	作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 110)"><br>
 	作業時間  ：<input type='text' name="timetable" onchange="drawText(this.name, 160)"><br><br>
 
-	<input type='text' name='dataurl'><br>
+	<input type='hidden' name='dataurl'><br>
 
 	<button type="button" onclick='createWidgets()'>アップロード</button>
 	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
@@ -50,19 +50,18 @@
 
 <script>
 
-    async function onLoad(){
+//     async function onLoad(){
 
-	var url = new URL(window.location.href);
-	var params = url.searchParams;
+// 	var url = new URL(window.location.href);
+// 	var params = url.searchParams;
 
-	if(!(params.get('emploee_id') == null || params.get('emploee_id') == '')){
-		miro.broadcastData({emploee_id : params.get('emploee_id')});
-		miro.board.ui.closeModal();
-	}else{
-		loadImage();
-	}
+// 	if(!(params.get('emploee_id') == null || params.get('emploee_id') == '')){
+// //		await miro.board.widgets.create({ type: 'image', url: 'https://logitem.herokuapp.com/' + params.get('emploee_id') + '.png'});
+// 	}else{
+// 		loadImage();
+// 	}
 
-    }
+//     }
 
     function loadImage(){
         //画像を読み込んでImageオブジェクトを作成する
@@ -92,10 +91,12 @@
 
             var imagefile = evt.target.files[0];
 
+
             var blobUrl = window.URL.createObjectURL(imagefile);
 
             var image = new Image();
             image.src = blobUrl;
+
 
             image.addEventListener('load', function(){
                 // 一旦写真の範囲をクリア
@@ -105,6 +106,7 @@
 	    
         
         },false);
+
 
         // Canvas内に文字を表示する
         function drawText(name, ypos){
@@ -122,7 +124,7 @@
             var x = (canvas.width -30);
             var y = (canvas.offsetTop + ypos);
        		clearText(context, x-220, ypos - 33);           // 範囲クリア位置調整
-            context.fillText(text[0].value, x, y);                
+            context.fillText(text[0].value, x, y);
         }
 
         // アップロード確定時にCanvasを合成する(編集用と確定用　編集用はクリア処理が入るため)
@@ -163,9 +165,10 @@
         // Widgetを作成して画面を閉じる
         async function createWidgets(){
 
-	        if(confirm('データをアップロードします。よろしいですか？') === false) {
+            if(confirm('データをアップロードします。よろしいですか？') === false) {
 	            return false;
 	        }
+
 	        // アップロード前に一旦送信用画像情報をクリア
 	        await loadImage();
 		    await concatCanvas();
@@ -177,8 +180,30 @@
                     return false;
                 }
             })
-            
-	        document.forms[0].submit();
+
+            // 合成された画像の一時ファイルを作成
+            var emploee_id = document.getElementsByName("emploee_id")[0].value;
+            var dataurl = document.getElementsByName('dataurl')[0].value;
+            fetch('http://localhost:5000/create', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({'emploee_id' : emploee_id , 'dataurl' : dataurl })
+            }).then(function (response) {
+                console.log(response.text());
+            }).then(function (text) {
+                console.log("RESULT: " + text);
+            });
+
+            // Widgetの作成
+            await miro.board.widgets.create({ type: 'image', url: 'http://localhost:5000/' + emploee_id + '.png', metadata:{'3074457358567435973':{stafid:'1111', attendance: true}}});
+
+            // 一時ファイルの削除
+
+            // ModalWindowを閉じる
+            miro.board.closeModal();
 
         }
 
