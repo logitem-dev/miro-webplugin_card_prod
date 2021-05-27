@@ -185,7 +185,7 @@
             });
 
             // Widgetの作成
-            await miro.board.widgets.create({ type: 'image', url: api_uri + emploee_id + '.png', metadata:{'3074457358567435973':{stafid: emploee_id, attendance: true}}});
+            await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{'3074457358567435973':{stafid: emploee_id, attendance: true}}});
 
             // 一時ファイルの削除
 
