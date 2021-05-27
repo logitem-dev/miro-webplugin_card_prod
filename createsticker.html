@@ -187,7 +187,20 @@
             // Widgetの作成
             await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{'3074457358567435973':{stafid: emploee_id, attendance: true}}});
 
+
             // 一時ファイルの削除
+            await fetch(api_uri + emploee_id  + '.png' , {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: '{}'
+            }).then(function (response) {
+                console.log(response.text());
+            }).then(function (text) {
+                console.log("RESULT: " + text);
+            });
 
             // ModalWindowを閉じる
             miro.board.ui.closeModal()
