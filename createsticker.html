@@ -23,6 +23,7 @@
 </head>
     
 <script src="https://miro.com/app/static/sdk.1.1.js"></script>
+<script src="./js/const.js"></script>
 <body onload="loadImage()">
 <form>
 
@@ -170,7 +171,7 @@
             // 合成された画像の一時ファイルを作成
             var emploee_id = document.getElementsByName("emploee_id")[0].value;
             var dataurl = document.getElementsByName('dataurl')[0].value;
-            fetch('https://logitem.herokuapp.com/create', {
+            await fetch(api_uri + 'create', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -184,7 +185,7 @@
             });
 
             // Widgetの作成
-            await miro.board.widgets.create({ type: 'image', url: 'https://logitem.herokuapp.com/' + emploee_id + '.png', metadata:{'3074457358567435973':{stafid:'1111', attendance: true}}});
+            await miro.board.widgets.create({ type: 'image', url: api_uri + emploee_id + '.png', metadata:{'3074457358567435973':{stafid: emploee_id, attendance: true}}});
 
             // 一時ファイルの削除
 
