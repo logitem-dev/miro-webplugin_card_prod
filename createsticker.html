@@ -71,13 +71,7 @@
             let images = selectedWidgets.filter((widget) => widget.type === 'IMAGE')
 
             if(images !== null){
-                var image = new Image();
-                image.src = images[0].url;
-                var canvas = document.getElementById('canvas');
-                var ctx = canvas.getContext('2d');
-                canvas.width = image.width;
-                canvas.height = image.height;
-                ctx.drawImage(image, 0, 0);
+		    alert(images[0].url);
             }            
         });
     }            
