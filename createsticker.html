@@ -50,7 +50,7 @@
 
 <script>
 
-    async function loadImage(){
+    function loadImage(){
         //画像を読み込んでImageオブジェクトを作成する
         var image = new Image();
         image.src = './img/sticker.png';
@@ -67,7 +67,7 @@
             document.getElementsByName('dataurl')[0].value = "";
 
             // Board上でカードが選択されている場合はそのカードを表示し編集する
-            let selectedWidgets = await miro.board.selection.get();
+            let selectedWidgets = miro.board.selection.get();
             let images = selectedWidgets.filter((widget) => widget.type === 'IMAGE')
 
             if(images !== null){
