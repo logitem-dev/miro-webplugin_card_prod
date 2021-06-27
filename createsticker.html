@@ -65,9 +65,8 @@
             ctx.drawImage(image, 0, 0);
             // DataUrlをクリア
             document.getElementsByName('dataurl')[0].value = "";
-
         });
-
+	    
         // Board上でカードが選択されている場合はそのカードを表示し編集する
         let selectedWidgets = await miro.board.selection.get();
         if(selectedWidgets !== null){}
@@ -82,8 +81,7 @@
                 canvas.height = image.height;
                 ctx.drawImage(image, 0, 0);
             }            
-        }
-
+        }	       
     }            
 
         var obj1 = document.getElementsByName("selfile");
