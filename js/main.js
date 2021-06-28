@@ -16,7 +16,12 @@ miro.onReady(() => {
 			
 
         },
-      },
+      }
+    },
+  }),
+  
+  miro.initialize({
+    extensionPoints: {
       bottomBar: {
         title: '勤怠ｱｯﾌﾟﾛｰﾄﾞ',
         svgIcon: iconUpdCSV, 
@@ -26,6 +31,6 @@ miro.onReady(() => {
         },
       }
     },
-  })
+  })  
 })
 
