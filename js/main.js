@@ -18,19 +18,6 @@ miro.onReady(() => {
         },
       }
     },
-  }),
-  
-  miro.initialize({
-    extensionPoints: {
-      bottomBar: {
-        title: '勤怠ｱｯﾌﾟﾛｰﾄﾞ',
-        svgIcon: iconUpdCSV, 
-        positionPriority: 1,
-        onClick: async () => {
-
-        },
-      }
-    },
   })  
 })
 
