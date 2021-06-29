@@ -93,6 +93,9 @@
           var tojson = JSON.stringify(card.metadata);
           var fromjson = JSON.parse(tojson);
 
+          console.log(listOn);
+          console.log(fromjson[client_id]['stafid']);
+
           if(listOn.includes(fromjson[client_id]['stafid'])){
 
             miro.board.widgets.transformDelta(card, posxOn-card.x, posyOn-card.y);
