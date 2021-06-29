@@ -67,8 +67,8 @@
 
         // 初期化位置の取得(出勤者)
         let frameOn = await miro.board.widgets.get({title: '出勤者'});
-        let xOn = frameOn[0].x - 450;
-        let yOn = frameOn[0].y - 330;
+        let xOn = frameOn[0].x - (frameOn[0].width / 2);
+        let yOn = frameOn[0].y - (frameOn[0].height / 2);
 
         let irowOn = 0;
         let icolOn = 0;
@@ -78,8 +78,8 @@
         
         // 初期化位置の取得(休暇者)
         let frameOff = await miro.board.widgets.get({title: '休暇'});
-        let xOff = frameOff[0].x - 450;
-        let yOff = frameOff[0].y - 330;
+        let xOff = frameOff[0].x - (frameOff[0].width / 2);
+        let yOff = frameOff[0].y - (frameOff[0].height / 2);
 
         let irowOff = 0;
         let icolOff = 0;
@@ -93,12 +93,9 @@
           var tojson = JSON.stringify(card.metadata);
           var fromjson = JSON.parse(tojson);
 
-          console.log(listOn);
-          console.log(fromjson[client_id]['stafid']);
-
           if(listOn.includes(fromjson[client_id]['stafid'])){
 
-            miro.board.widgets.transformDelta(card, posxOn-card.x, posyOn-card.y);
+            miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y);
 
             if(icolOn !== max_col){
               icolOn++;
@@ -111,7 +108,7 @@
 
           }else{
 
-            miro.board.widgets.transformDelta(card, posxOff-card.x, posyOff-card.y);
+            miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y);
 
             if(icolOff !== max_col){
               icolOff++;
