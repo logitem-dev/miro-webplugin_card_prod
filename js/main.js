@@ -29,7 +29,7 @@ miro.onReady(() => {
 		}
 	  },
       exportMenu: {
-        title: '勤怠CSVｱｯﾌﾟﾛｰﾄﾞ',
+        title: 'CSVｴｸｽﾎﾟｰﾄ',
         svgIcon: iconExportCsv, 
         positionPriority: 1,
         onClick: async () => {
