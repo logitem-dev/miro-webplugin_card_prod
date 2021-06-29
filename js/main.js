@@ -23,7 +23,7 @@ miro.onReady(() => {
         positionPriority: 1,
         onClick: async () => {
 
-			await miro.board.ui.openModal('uploadcsv.html', { width: 200, height: 200 });
+			await miro.board.ui.openModal('uploadcsv.html', { width: 300, height: 200 });
 
 		}
 	  }
