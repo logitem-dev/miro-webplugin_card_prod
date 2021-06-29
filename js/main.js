@@ -17,28 +17,27 @@ miro.onReady(() => {
 
         },
       },
-      bottomBar: {
+      toolbar: {
         title: '勤怠CSVｱｯﾌﾟﾛｰﾄﾞ',
-        svgIcon: iconUpdCSV, 
-        positionPriority: 2,
+        toolbarSvgIcon: iconUpdCSV, 
+        librarySvgIcon: iconUpdCSV,
+        positionPriority: 1,
         onClick: async () => {
 
 			await miro.board.ui.openModal('uploadcsv.html', { width: 300, height: 200 });
-			
 
-        },
-      },
-      bottomBar: {
-        title: 'CSVｴｸｽﾎﾟｰﾄ',
+		}
+	  },
+      exportMenu: {
+        title: '勤怠CSVｱｯﾌﾟﾛｰﾄﾞ',
         svgIcon: iconExportCsv, 
-        positionPriority: 3,
+        positionPriority: 1,
         onClick: async () => {
 
 			alert('CSV Export');
-			
 
-        },
-      }
+		}
+	  }
 	}
   })  
 })
