@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8"/>
+</head>
+    
+<script src="https://miro.com/app/static/sdk.1.1.js"></script>
+<script src="./js/const.js"></script>
+<body>
+<form>
+
+	<input type="file" name="selfile" accept='.csv' required><br><br>
+
+    <textarea name="csv" rows="10" cols="40" readonly style='display:none'></textarea>
+
+	<button type="button" onclick='readCSV()'>アップロード</button>
+	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
+
+</form>
+
+<script>
+
+    //ダイアログでファイルが選択された時
+    var obj1 = document.getElementsByName("selfile");
+    obj1[0].addEventListener("change",function(evt){
+
+        var file = evt.target.files;
+
+        //FileReaderの作成
+        var reader = new FileReader();
+        //テキスト形式で読み込む
+        reader.readAsText(file[0]);
+        
+        //読込終了後の処理
+        reader.onload = function(ev){
+            //テキストエリアに表示する
+            document.forms[0].csv.value = reader.result;
+        }
+    },false);
+
+    async function readCSV(){
+
+      var obj1 = document.getElementsByName("csv");
+      let lines = obj1[0].value.split(/\r?\n/);
+      let datas = lines.map(line=> line.split(','));
+
+      var lstOn = datas.filter(d=> d[1] === '1');
+      var lstOff = datas.filter(d=> d[1] === '0');
+
+      await resetCards(listOn, listOff);
+	
+        // ModalWindowを閉じる
+        miro.board.ui.closeModal();
+	
+    }
+
+    async function resetCards(listOn, listOff){
+
+      // 確認メッセージ表示
+      let needToClear = confirm("勤怠ファイルを読み込みボードを初期化します。よろしいですか？");
+
+      if(needToClear){
+
+        const max_col = 2;
+        // 全従業員カードオブジェクトの取得
+        let allCards = await miro.board.widgets.get({type: 'IMAGE'})
+
+        // 初期化位置の取得(出勤者)
+        let frameOn = await miro.board.widgets.get({title: '出勤者'});
+        let xOn = frameOn[0].x - 450;
+        let yOn = frameOn[0].y - 330;
+
+        let irowOn = 0;
+        let icolOn = 0;
+
+        let posxOn = xOn;
+        let posyOn = yOn;	          
+        
+        // 初期化位置の取得(休暇者)
+        let frameOff = await miro.board.widgets.get({title: '休暇'});
+        let xOff = frameOff[0].x - 450;
+        let yOff = frameOff[0].y - 330;
+
+        let irowOff = 0;
+        let icolOff = 0;
+
+        let posxOff = xOff;
+        let posyOff = yOff;         
+
+        // カードオブジェクトを出勤者・休暇者Frame上に移動
+        allCards.forEach(card => {
+
+          var tojson = JSON.stringify(card.metadata);
+          var fromjson = JSON.parse(tojson);
+
+          if(listOn.find(fromjson[client_id]['stafid'])){
+
+            miro.board.widgets.transformDelta(card, posxOn-card.x, posyOn-card.y);
+
+            if(icolOn !== max_col){
+              icolOn++;
+              posxOn = xOn + (card.bounds.width + 20) * icolOn;
+            }else{
+              posxOn = xOn;
+              icolOn = 0;
+              posyOn = yOn + (card.bounds.height * ++irowOn);
+            }
+
+          }else{
+
+            miro.board.widgets.transformDelta(card, posxOff-card.x, posyOff-card.y);
+
+            if(icolOff !== max_col){
+              icolOff++;
+              posxOff = xOff + (card.bounds.width + 20) * icolOff;
+            }else{
+              posxOff = xOff;
+              icolOff = 0;
+              posyOff = yOff + (card.bounds.height * ++irowOff);
+            }
+          }
+        });
+
+        // Show success message
+          miro.showNotification('ボードを初期化しました。')  
+      }
+    }
+
+    function closeWindow(){
+        miro.board.ui.closeModal();
+    }
+
+</script>
+</body>
+</html>
