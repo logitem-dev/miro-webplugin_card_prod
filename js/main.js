@@ -28,17 +28,17 @@ miro.onReady(() => {
 
 		}
 	  },
-	  getWidgetMenuItems: (widgets) => {
+      toolbar: {
+        title: 'CSVｴｸｽﾎﾟｰﾄ',
+        toolbarSvgIcon: iconExportCsv, 
+        librarySvgIcon: iconExportCsv,
+        positionPriority: 1,
+        onClick: async () => {
 
-        return Promise.resolve([{
-        	tooltip: 'CSVｴｸｽﾎﾟｰﾄ',
-        	svgIcon: iconExportCsv,
-        	onClick: (widgets) => {
-        		alert('CSV Export');
-        	}
-        
-        }]);
-      }
+			alert('CSV Export');
+
+		}
+	  }
 	}
   })  
 })
