@@ -32,7 +32,7 @@ miro.onReady(() => {
         title: 'CSVｴｸｽﾎﾟｰﾄ',
         toolbarSvgIcon: iconExportCsv, 
         librarySvgIcon: iconExportCsv,
-        positionPriority: 1,
+        positionPriority: 2,
         onClick: async () => {
 
 			alert('CSV Export');
