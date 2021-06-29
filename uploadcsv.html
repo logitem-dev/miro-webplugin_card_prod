@@ -44,8 +44,8 @@
       let lines = obj1[0].value.split(/\r?\n/);
       let datas = lines.map(line=> line.split(','));
 
-      var listOn = datas.filter(d=> d[1] === '1');
-      var listOff = datas.filter(d=> d[1] === '0');
+      var listOn = datas.filter(d=> d[1] === '1').map(d=> d[0]);
+      var listOff = datas.filter(d=> d[1] === '0').map(d=> d[0]);
 
       await resetCards(listOn, listOff);
 	
