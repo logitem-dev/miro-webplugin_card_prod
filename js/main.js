@@ -25,8 +25,9 @@ miro.onReady(() => {
 
 			alert('CSV upload');
 
-        },      
-    },
+		}
+	  }
+	}
   })  
 })
 
