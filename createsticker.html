@@ -37,7 +37,7 @@
 
     	作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 60)"><br>
 	作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 110)"><br>
-	作業時間  ：<input type='text' name="timetable" onchange="drawText(this.name, 160)"><br><br>
+	作業時間  ：<input type='text' name="working_hour" onchange="drawText(this.name, 160)"><br><br>
 
 	<input type='hidden' name='dataurl'><br>
 
@@ -186,6 +186,8 @@
 
             // 合成された画像の一時ファイルを作成
             var emploee_id = document.getElementsByName("emploee_id")[0].value;
+            var emploee_name = document.getElementsByName("emploee_name")[0].value;
+            var working_hour = document.getElementsByName("working_hour")[0].value;
             var dataurl = document.getElementsByName('dataurl')[0].value;
             await fetch(api_uri + 'create', {
                 method: 'POST',
@@ -201,8 +203,7 @@
             });
 
             // Widgetの作成
-            await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{stafid: emploee_id, attendance: true}}});
-
+            await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
 
             // 一時ファイルの削除
             await fetch(api_uri + emploee_id  + '.png' , {
