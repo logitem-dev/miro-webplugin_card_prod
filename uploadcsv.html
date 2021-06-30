@@ -93,8 +93,7 @@
           var tojson = JSON.stringify(card.metadata);
           var fromjson = JSON.parse(tojson);
 
-          if(typeof fromjson !== 'undefined'){
-            console.log(fromjson);
+          if(fromjson !== "{}"){
 
             if(listOn.includes(fromjson[client_id]['stafid'])){
 
