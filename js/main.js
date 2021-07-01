@@ -33,13 +33,13 @@ miro.onReady(() => {
   miro.initialize({
     extensionPoints: {
       toolbar: {
-        title: '勤怠CSVｱｯﾌﾟﾛｰﾄﾞ',
-        toolbarSvgIcon: iconUpdCSV, 
-        librarySvgIcon: iconUpdCSV,
+        title: 'CSVﾀﾞｳﾝﾛｰﾄﾞ',
+        toolbarSvgIcon: iconExportCsv, 
+        librarySvgIcon: iconExportCsv,
         positionPriority: 1,
         onClick: async () => {
 
-			    await miro.board.ui.openModal('uploadcsv.html', { width: 300, height: 200 });
+			    alert("csv esport");
 
 		    }
 	    }
