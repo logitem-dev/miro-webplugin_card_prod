@@ -39,6 +39,22 @@ miro.onReady(() => {
 		}
 	  }
 	}
-  })  
+  }),
+  miro.initialize({
+    extensionPoints: {
+      toolbar: {
+        title: 'CSVｴｸｽﾎﾟｰﾄ',
+        toolbarSvgIcon: iconExportCsv, 
+        librarySvgIcon: iconExportCsv,
+        positionPriority: 1,
+        onClick: async () => {
+
+			alert('CSV Export');
+
+		}
+	  }
+	}
+  })
 })
+
 
