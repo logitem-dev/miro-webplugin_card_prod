@@ -28,23 +28,3 @@ miro.onReady(() => {
 	  }
   })
 })
-
-miro.onReady(() => {
-  miro.initialize({
-    extensionPoints: {
-      toolbar: {
-        title: 'CSVﾀﾞｳﾝﾛｰﾄﾞ',
-        toolbarSvgIcon: iconExportCsv, 
-        librarySvgIcon: iconExportCsv,
-        positionPriority: 1,
-        onClick: async () => {
-
-			    alert("csv esport");
-
-		    }
-	    }
-	  }
-  })
-})
-
-
