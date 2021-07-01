@@ -11,10 +11,7 @@ miro.onReady(() => {
         svgIcon: iconCard, 
         positionPriority: 1,
         onClick: async () => {
-
-			await miro.board.ui.openModal('createsticker.html', { width: 500, height: 500 });
-			
-
+			    await miro.board.ui.openModal('createsticker.html', { width: 500, height: 500 });
         },
       },
       toolbar: {
@@ -24,36 +21,29 @@ miro.onReady(() => {
         positionPriority: 1,
         onClick: async () => {
 
-			await miro.board.ui.openModal('uploadcsv.html', { width: 300, height: 200 });
+			    await miro.board.ui.openModal('uploadcsv.html', { width: 300, height: 200 });
 
-		}
-	  },
-      exportMenu: {
-        title: 'CSVｴｸｽﾎﾟｰﾄ',
-        svgIcon: iconExportCsv, 
-        positionPriority: 1,
-        onClick: async () => {
-
-			alert('CSV Export');
-
-		}
+		    }
+	    }
 	  }
-	}
-  }),
+  })
+})
+
+miro.onReady(() => {
   miro.initialize({
     extensionPoints: {
       toolbar: {
-        title: 'CSVｴｸｽﾎﾟｰﾄ',
-        toolbarSvgIcon: iconExportCsv, 
-        librarySvgIcon: iconExportCsv,
-        positionPriority: 2,
+        title: '勤怠CSVｱｯﾌﾟﾛｰﾄﾞ',
+        toolbarSvgIcon: iconUpdCSV, 
+        librarySvgIcon: iconUpdCSV,
+        positionPriority: 1,
         onClick: async () => {
 
-			alert('CSV Export_toolbar');
+			    await miro.board.ui.openModal('uploadcsv.html', { width: 300, height: 200 });
 
-		}
+		    }
+	    }
 	  }
-	}
   })
 })
 
