@@ -44,6 +44,12 @@
       let lines = obj1[0].value.split(/\r?\n/);
       let datas = lines.map(line=> line.split(','));
 
+      // 当日のデータのみ抽出
+      var d = new Date();
+      var today = d.getFullYear() + "/" + ('0' + (d.getMonth() + 1)).slice(-2) + "/" + ('0' + (d.getDate())).slice(-2);
+      let dateIndex = await datas[0].find(d=> d === '日付');
+      datas = datas.filter(d=> d[dateIndex] == today);
+
       // 出勤フラグでデータを振り分ける
       let attendIndex = await datas[0].find(d=> d === '出勤');
       let idIndex = await datas[0].find(d=> d === '社員番号');
