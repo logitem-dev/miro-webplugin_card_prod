@@ -44,8 +44,15 @@
       let lines = obj1[0].value.split(/\r?\n/);
       let datas = lines.map(line=> line.split(','));
 
-      var listOn = datas.filter(d=> d[1] === '1').map(d=> d[0]);
-      var listOff = datas.filter(d=> d[1] === '0').map(d=> d[0]);
+      // 出勤フラグでデータを振り分ける
+      let attendIndex = await datas[0].find(d=> d === '出勤');
+      let idIndex = await datas[0].find(d=> d === '社員番号');
+
+      var listOn = await datas.filter(d=> d[attendIndex] === '1').map(d=> d[idIndex]);
+      var listOff = await datas.filter(d=> d[attendIndex] === '0').map(d=> d[idIndex]);
+
+      console.log(listOn);
+      console.log(listOff);
 
       await resetCards(listOn, listOff);
 	
