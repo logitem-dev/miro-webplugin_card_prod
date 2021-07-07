@@ -44,6 +44,8 @@
       let lines = obj1[0].value.split(/\r?\n/);
       let datas = lines.map(line=> line.split(','));
 
+      console.log(datas);
+
       // ヘッダ情報の取得
       let dateIndex = await datas[0].find(d=> d === '日付');
       let attendIndex = await datas[0].find(d=> d === '出勤');
