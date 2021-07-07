@@ -47,9 +47,9 @@
       console.log(datas);
 
       // ヘッダ情報の取得
-      let dateIndex = await datas[0].find(d=> d === '日付');
-      let attendIndex = await datas[0].find(d=> d === '出勤');
-      let idIndex = await datas[0].find(d=> d === '社員番号');
+      let dateIndex = await datas[0].indexOf('日付');
+      let attendIndex = await datas[0].indexOf('出勤');
+      let idIndex = await datas[0].indexOf('社員番号');
 
       console.log(dateIndex);
       console.log(attendIndex);
