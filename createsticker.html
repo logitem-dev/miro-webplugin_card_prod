@@ -267,7 +267,7 @@
                     var fromjson = JSON.parse(tojson);
 
                     if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
-                        staffIds.add(fromjson[client_id]['staffid']);
+                        staffIds.push(fromjson[client_id]['staffid']);
                     }
                 });
 
