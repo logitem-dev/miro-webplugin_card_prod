@@ -291,6 +291,7 @@
                     
 
                     if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
+console.log(fromjson[client_id]['staffid']);	    
                         if(fromjson[client_id]['staffid'] === emploeeId){
                             oldid = image.id;
                         }
