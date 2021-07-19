@@ -72,6 +72,7 @@
                 document.getElementsByName("emploee_name")[0].value = staffName;
                 document.getElementsByName("working_hour")[0].value = workHour;
                 
+                var loadimage = new Image();
                 await fetch(api_uri + 'loadimage/' + staffid + '.png' , {
                 method: 'GET',
                 headers: {
