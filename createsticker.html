@@ -215,6 +215,8 @@
 	            return false;
 	        }
 
+            document.body.style.cursor = 'wait'; 
+
 	        // アップロード前に一旦送信用画像情報をクリア
 	        await loadImage();
 		    await concatCanvas();
@@ -274,6 +276,8 @@
                 console.log("RESULT: " + text);
             });
 
+            document.body.style.cursor = 'auto'; 
+            
             // ModalWindowを閉じる
             miro.board.ui.closeModal()
 
