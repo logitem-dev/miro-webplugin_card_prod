@@ -247,13 +247,12 @@
 
             var oldid = document.getElementsByName("oldwidghtId")[0].value;
             if(oldid){
-                // 既存カードの編集の場合                
-console.log(await miro.board.widgets.get({id: oldid}))                
+                // 既存カードの編集の場合
                 var oldwidget = await miro.board.widgets.get({id: '3074457361513942983'});
 console.log(oldwidget);
+console.log(oldwidget.id);
                 // 元カードの削除
                 await miro.board.widgets.deleteById(oldwidget.id);
-console.log(oldwidget.id);
                 // Widgetの作成
                 await miro.board.widgets.create({ type: 'image', x: oldwidget.x, y: oldwidget.y, scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
 console.log(create);
