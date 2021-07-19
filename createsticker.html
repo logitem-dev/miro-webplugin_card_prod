@@ -61,12 +61,13 @@
         let images = selectedWidgets.filter((widget) => widget.type === 'IMAGE');
 
         if(images.length !== 0){
-            document.getElementsByName("copy")[0].enabled=true;
 
             var tojson = JSON.stringify(images[0].metadata);
             var fromjson = JSON.parse(tojson);
 
             if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
+
+                document.getElementsByName("copy")[0].disabled=false;
 
                 var staffid = fromjson[client_id]['staffid'];
                 var staffName = fromjson[client_id]['staffName'];
@@ -106,7 +107,8 @@
 
                 });
             }else{
-                document.getElementsByName("copy")[0].enabled=false;
+                document.getElementsByName("copy")[0].disabled=true;
+
             }
         }	       
 
