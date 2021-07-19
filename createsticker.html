@@ -252,7 +252,6 @@
                 console.log("RESULT: " + text);
             });
 
-		console.log(copyFlag);
             if(copyFlag === true){
                 // 複製(新規登録)
 
@@ -263,15 +262,7 @@
                 var allImages = await miro.board.widgets.get({type: 'IMAGE'});
 
                 allImages.forEach(image => {
-                // 複製
-                var oldid = document.getElementsByName("oldwidghtId")[0].value;
-                if(oldid){
-                    // 既存カードの編集の場合
-                    var oldwidget = await miro.board.widgets.get({id: oldid});
-                    // 元カードの削除
-                    await miro.board.widgets.deleteById(oldwidget[0].id);
-                    // Widgetの作成
-                    await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
+
                     var tojson = JSON.stringify(image.metadata);
                     var fromjson = JSON.parse(tojson);
 
@@ -291,17 +282,15 @@
                     createImage('');
                 }
 
-            }else{
 
+
+            }else{
                 if(confirm('カードを上書き保存します。よろしいですか？') === false) {
 	                return false;
     	        }
                 // 上書き保存
                 var oldid = document.getElementsByName("oldwidghtId")[0].value;
                 createImage(oldid);
-                // 新規登録
-                await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
-
             }
 
 
@@ -327,15 +316,17 @@
         }
 
         // ImageWidgetの作成
-        async function createImage(oldid){
+        function createImage(oldid){
 
             if(oldid){
+
                 // 元カードの削除
                 var oldwidget = await miro.board.widgets.get({id: oldid});
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
                 await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
 
+                return;
             }
             await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
         }
