@@ -35,15 +35,15 @@
 
     <!-- <img src="" name="image1" height='200' width='167'><br> -->
 
-    	作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 60)"><br>
+    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 60)"><br>
 	作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 110)"><br>
 	作業時間  ：<input type='text' name="working_hour" onchange="drawText(this.name, 160)"><br><br>
 
 	<input type='hidden' name='dataurl'><br>
     <input type='hidden' name='oldwidghtId'><br>
 
-	<button type="button" name='register' onclick='createWidgets(false)'>登録</button>
-    <button type="button" name='copy' onclick='createWidgets(true)' disabled>複製</button>
+	<button type="button" name='register' onclick='UploadAndRegister(false)'>登録</button>
+    <button type="button" name='copy' onclick='UploadAndRegister(true)' disabled>複製</button>
 	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
     </div>    
 
@@ -213,8 +213,8 @@
             miro.board.ui.closeModal();
         }
 
-        // Widgetを作成して画面を閉じる
-        async function createWidgets(copyFlag){
+        // 画像ファイルをアップロードしてImageWidgetを作成する
+        async function UploadAndRegister(copyFlag){
 
             if(confirm('データをアップロードします。よろしいですか？') === false) {
 	            return false;
@@ -253,23 +253,42 @@
             });
 
             if(copyFlag === true){
-                // 複製
-                var oldid = document.getElementsByName("oldwidghtId")[0].value;
-                if(oldid){
-                    // 既存カードの編集の場合
-                    var oldwidget = await miro.board.widgets.get({id: oldid});
-                    // 元カードの削除
-                    await miro.board.widgets.deleteById(oldwidget[0].id);
-                    // Widgetの作成
-                    await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
+                // 複製(新規登録)
 
+                // 同一社員番号のカードが存在しないか確認する
+                var staffIds;
+
+                var newStaffid = document.getElementsByName("emploee_id")[0].value;
+                var allImages = await miro.board.widgets.get({type: 'IMAGE'});
+
+                allImages.forEach(image => {
+
+                    var tojson = JSON.stringify(image.metadata);
+                    var fromjson = JSON.parse(tojson);
+
+                    if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
+                        staffIds.add(fromjson[client_id]['staffid']);
+                    }
+                });
+
+                if(staffIds.some(staffid=> newStaffid === staffid){
+                    if(confirm('社員番号' + staffid + 'のカードはすでに存在します。上書き保存しますか？') === false) {
+                        return false;
+                    }
+                    // 上書き保存
+                    createImage(staffid);
                 }else{
-                    // Widgetの新規作成
-                    await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
+                    // 新規登録
+                    createImage('');
                 }
+
             }else{
-                // 新規登録
-                await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
+                if(confirm('カードを上書き保存します。よろしいですか？') === false) {
+	                return false;
+    	        }
+                // 上書き保存
+                var oldid = document.getElementsByName("oldwidghtId")[0].value;
+                createImage(oldid);
             }
 
 
@@ -293,6 +312,23 @@
             miro.board.ui.closeModal()
 
         }
+
+        // ImageWidgetの作成
+        function createImage(oldid){
+
+            if(oldid){
+
+                // 元カードの削除
+                var oldwidget = await miro.board.widgets.get({id: oldid});
+                await miro.board.widgets.deleteById(oldwidget[0].id);
+                // Widgetの作成
+                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
+
+                return;
+            }
+            await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
+        }
+
 
 
     </script>        
