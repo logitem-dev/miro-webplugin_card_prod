@@ -236,19 +236,6 @@
 
             // 合成された画像の一時ファイルを作成
             var emploeeId = document.getElementsByName("emploee_id")[0].value;
-            var dataurl = document.getElementsByName('dataurl')[0].value;
-            await fetch(api_uri + 'create', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({'emploee_id' : emploeeId , 'dataurl' : dataurl })
-            }).then(function (response) {
-                console.log(response.text());
-            }).then(function (text) {
-                console.log("RESULT: " + text);
-            });
 
             if(copyFlag === true){
                 // 複製(新規登録)
@@ -276,10 +263,10 @@
                         return false;
                     }
                     // 上書き保存
-                    createImage(emploeeId, oldid);
+                    await createWidget(emploeeId, oldid);
                 }else{
                     // 新規登録
-                    createImage(emploeeId, '');
+                    await createWidget(emploeeId, '');
                 }
 
             }else{
@@ -288,7 +275,7 @@
     	        }
                 // 上書き保存
                 var oldid = document.getElementsByName("oldwidghtId")[0].value;
-                createImage(emploeeId, oldid);
+                await createWidget(emploeeId, oldid);
             }
 
 
@@ -314,10 +301,24 @@
         }
 
         // ImageWidgetの作成
-        async function createImage(emploeeId, oldid){
+        async function createWidget(emploeeId, oldid){
 
             var emploeeName = document.getElementsByName("emploee_name")[0].value;
             var workingHour = document.getElementsByName("working_hour")[0].value;
+
+            var dataurl = document.getElementsByName('dataurl')[0].value;
+            await fetch(api_uri + 'create', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({'emploee_id' : emploeeId , 'dataurl' : dataurl })
+            }).then(function (response) {
+                console.log(response.text());
+            }).then(function (text) {
+                console.log("RESULT: " + text);
+            });
 
             if(oldid){
 
