@@ -236,8 +236,6 @@
 
             // 合成された画像の一時ファイルを作成
             var emploee_id = document.getElementsByName("emploee_id")[0].value;
-            var emploee_name = document.getElementsByName("emploee_name")[0].value;
-            var working_hour = document.getElementsByName("working_hour")[0].value;
             var dataurl = document.getElementsByName('dataurl')[0].value;
             await fetch(api_uri + 'create', {
                 method: 'POST',
@@ -256,9 +254,7 @@
                 // 複製(新規登録)
 
                 // 同一社員番号のカードが存在しないか確認する
-                var staffIds = [];
-
-                var newStaffid = document.getElementsByName("emploee_id")[0].value;
+                var oldid;
                 var allImages = await miro.board.widgets.get({type: 'IMAGE'});
 
                 allImages.forEach(image => {
@@ -267,19 +263,19 @@
                     var fromjson = JSON.parse(tojson);
 
                     if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
-                        staffIds.push(fromjson[client_id]['staffid']);
+                        oldid = image.id;
                     }
                 });
 
-                if(staffIds.some(staffid=> staffid === newStaffid)){
-                    if(confirm('社員番号' + newStaffid + 'のカードはすでに存在します。上書き保存しますか？') === false) {
+                if(oldid){
+                    if(confirm('社員番号' + emploee_id + 'のカードはすでに存在します。上書き保存しますか？') === false) {
                         return false;
                     }
                     // 上書き保存
-                    createImage(staffid);
+                    createImage(emploee_id, oldid);
                 }else{
                     // 新規登録
-                    createImage('');
+                    createImage(emploee_id, '');
                 }
 
             }else{
@@ -288,7 +284,7 @@
     	        }
                 // 上書き保存
                 var oldid = document.getElementsByName("oldwidghtId")[0].value;
-                createImage(oldid);
+                createImage(emploee_id, oldid);
             }
 
 
@@ -314,7 +310,10 @@
         }
 
         // ImageWidgetの作成
-        async function createImage(oldid){
+        async function createImage(emploeeId, oldid){
+
+            var emploeeName = document.getElementsByName("emploee_name")[0].value;
+            var workingHour = document.getElementsByName("working_hour")[0].value;
 
             if(oldid){
 
@@ -322,11 +321,11 @@
                 var oldwidget = await miro.board.widgets.get({id: oldid});
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
-                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
+                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 0.8, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
 
                 return;
             }
-            await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
+            await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
         }
 
 
