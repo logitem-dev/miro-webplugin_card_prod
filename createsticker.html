@@ -50,6 +50,14 @@
 
 <script>
 
+    miro.onReady(() => {
+
+        let selectedWidgets = await miro.board.selection.get();
+        let images = selectedWidgets.filter((widget) => widget.type === 'IMAGE');
+
+    });
+
+
     async function loadImage(){
         //画像を読み込んでImageオブジェクトを作成する
 
@@ -67,51 +75,7 @@
             ctx.drawImage(image, 0, 0);
             // DataUrlをクリア
             document.getElementsByName('dataurl')[0].value = "";
-        });
-	    
-        // Board上でカードが選択されている場合は編集用にS3から画像を取得する
-console.log(await miro.board.selection.get());	    
-        let selectedWidgets = await miro.board.selection.get();
-        let images = selectedWidgets.filter((widget) => widget.type === 'IMAGE');
-         if(images !== null){
-            var tojson = JSON.stringify(selectedWidgets[0].metadata);
-            var fromjson = JSON.parse(tojson);
-
-            if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
-
-                var staffid = fromjson[client_id]['staffid'];
-                
-                if(images !== null){
-                    await fetch(api_uri + 'loadimage/' + staffid + '.png' , {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    }).then(function (response) {
-                        return response.blob();
-                    }).then(function(blob) {
-                        var objectURL = URL.createObjectURL(blob);
-                        loadimage.src = objectURL;
-                    });
-
-
-                    loadimage.onload = (function () {
-                        //画像ロードが完了してからキャンバスの準備をする
-                        var canvas = document.getElementById('canvas');
-                        var ctx = canvas.getContext('2d');
-                        //キャンバスのサイズを画像サイズに合わせる
-                        canvas.width = loadimage.width;
-                        canvas.height = loadimage.height;
-                        //キャンバスに画像を描画（開始位置0,0）
-                        ctx.drawImage(loadimage, 0, 0);
-                        // DataUrlをクリア
-                        document.getElementsByName('dataurl')[0].value = "";
-
-                    });
-                }            
-            }
-        }	       
+        });  
     } 
 
         var obj1 = document.getElementsByName("selfile");
