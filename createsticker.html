@@ -52,7 +52,7 @@
 
     miro.onReady(() => {
 
-        let selectedWidgets = await miro.board.selection.get();
+        let selectedWidgets = miro.board.selection.get();
         let images = selectedWidgets.filter((widget) => widget.type === 'IMAGE');
 
     });
