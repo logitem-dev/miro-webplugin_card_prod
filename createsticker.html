@@ -59,7 +59,7 @@
         let selectedWidgets = await miro.board.selection.get();
         let images = selectedWidgets.filter((widget) => widget.type === 'IMAGE');
 
-        if(images !== null){
+        if(images.length !== 0){
             var tojson = JSON.stringify(images[0].metadata);
             var fromjson = JSON.parse(tojson);
 
