@@ -70,8 +70,9 @@
         });
 	    
         // Board上でカードが選択されている場合は編集用にS3から画像を取得する
-        let selectedWidgets = await miro.board.selection.get().filter((widget) => widget.type === 'IMAGE');
-         if(selectedWidgets !== null){
+        let selectedWidgets = await miro.board.selection.get();
+        let images = selectedWidgets.filter((widget) => widget.type === 'IMAGE');
+         if(images !== null){
             var tojson = JSON.stringify(selectedWidgets[0].metadata);
             var fromjson = JSON.parse(tojson);
 
