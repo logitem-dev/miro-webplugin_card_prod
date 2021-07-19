@@ -327,17 +327,15 @@
         }
 
         // ImageWidgetの作成
-        function createImage(oldid){
+        async function createImage(oldid){
 
             if(oldid){
-
                 // 元カードの削除
                 var oldwidget = await miro.board.widgets.get({id: oldid});
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
                 await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
 
-                return;
             }
             await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
         }
