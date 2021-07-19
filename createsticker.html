@@ -272,7 +272,7 @@
                 });
 
                 if(staffIds.some(staffid=> staffid === newStaffid)){
-                    if(confirm('社員番号' + staffid + 'のカードはすでに存在します。上書き保存しますか？') === false) {
+                    if(confirm('社員番号' + newStaffid + 'のカードはすでに存在します。上書き保存しますか？') === false) {
                         return false;
                     }
                     // 上書き保存
