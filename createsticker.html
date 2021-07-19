@@ -43,7 +43,7 @@
     <input type='hidden' name='oldwidghtId'><br>
 
 	<button type="button" name='register' onclick='createWidgets(false)'>登録</button>
-    <button type="button" name='copy' onclick='createWidgets(true)'>複製</button>
+    <button type="button" name='copy' onclick='createWidgets(true)' disabled>複製</button>
 	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
     </div>    
 
@@ -106,8 +106,6 @@
                     document.getElementsByName('dataurl')[0].value = "";
 
                 });
-            }else{
-                document.getElementsByName("copy")[0].disabled=true;
 
             }
         }	       
