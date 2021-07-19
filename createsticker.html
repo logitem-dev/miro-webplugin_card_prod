@@ -39,7 +39,6 @@
 	作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 110)"><br>
 	作業時間  ：<select name="working_hour" onchange="drawText(this.name, 160)">
                     <option value='-'>-</option>
-                    <option value='-'>-</option>
                     <option value='8:00-15:00'>8:00-15:00</option>
                     <option value='8:00-12:00'>8:00-12:00</option>
                     <option value='8:00-13:00'>8:00-13:00</option>
@@ -122,11 +121,11 @@
                 document.getElementsByName("emploee_name")[0].value = staffName;
 
                 var optionWorkHour = document.querySelectorAll("select[name=working_hour] option");
-                    for(var workHour of optionWorkHour) {
-                        if(workHour.textContent === workHour) {
-                            state.selected = true;
+                    for(var option of optionWorkHour) {
+                        if(option.textContent === workHour) {
+                            option.selected = true;
                         } else {
-                            state.selected = false;
+                            option.selected = false;
                         }
                     }                
                 document.getElementsByName("oldwidghtId")[0].value = images[0].id;
