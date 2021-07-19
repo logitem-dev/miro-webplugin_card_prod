@@ -40,6 +40,7 @@
 	作業時間  ：<input type='text' name="working_hour" onchange="drawText(this.name, 160)"><br><br>
 
 	<input type='hidden' name='dataurl'><br>
+    <input type='text' name='oldwidghtId'><br>
 
 	<button type="button" onclick='createWidgets()'>アップロード</button>
 	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
@@ -60,7 +61,6 @@
 
         if(images !== null){
             var tojson = JSON.stringify(images[0].metadata);
-		console.log(tojson);
             var fromjson = JSON.parse(tojson);
 
             if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
@@ -72,6 +72,7 @@
                 document.getElementsByName("emploee_id")[0].value = staffid;
                 document.getElementsByName("emploee_name")[0].value = staffName;
                 document.getElementsByName("working_hour")[0].value = workHour;
+                document.getElementsByName("oldwidghtId")[0].value = images[0].id;
                 
                 var loadimage = new Image();
                 await fetch(api_uri + 'loadimage/' + staffid + '.png' , {
@@ -244,8 +245,20 @@
                 console.log("RESULT: " + text);
             });
 
-            // Widgetの作成
-            await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
+            var oldid = document.getElementsByName("oldwidghtId")[0].value;
+            if(oldid){
+                // 既存カードの編集の場合                
+                var oldwidget = await miro.board.widgets.get({ id: oldid});
+                // 元カードの削除
+                await miro.board.widgets.deleteById(oldwidget.id);
+                // Widgetの作成
+                await miro.board.widgets.create({ type: 'image', x: oldwidget.x, y: oldwidget.y, scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
+
+            }else{
+                // Widgetの新規作成
+                await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
+            }
+
 
             // 一時ファイルの削除
             await fetch(api_uri + emploee_id  + '.png' , {
