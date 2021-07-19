@@ -51,7 +51,6 @@
 <script>
 
     miro.onReady(() => {
-
         getCardInfo();
     });
 
@@ -66,36 +65,40 @@
             if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
 
                 var staffid = fromjson[client_id]['staffid'];
+                var staffName = fromjson[client_id]['staffName'];
+                var workHour = fromjson[client_id]['working_hour'];
+
+                document.getElementsByName("emploee_id")[0].value = satffid;
+                document.getElementsByName("emploee_name")[0].value = staffName;
+                document.getElementsByName("working_hour")[0].value = workHour;
                 
-                if(images !== null){
-                    await fetch(api_uri + 'loadimage/' + staffid + '.png' , {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    }).then(function (response) {
-                        return response.blob();
-                    }).then(function(blob) {
-                        var objectURL = URL.createObjectURL(blob);
-                        loadimage.src = objectURL;
-                    });
+                await fetch(api_uri + 'loadimage/' + staffid + '.png' , {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                }).then(function (response) {
+                    return response.blob();
+                }).then(function(blob) {
+                    var objectURL = URL.createObjectURL(blob);
+                    loadimage.src = objectURL;
+                });
 
 
-                    loadimage.onload = (function () {
-                        //画像ロードが完了してからキャンバスの準備をする
-                        var canvas = document.getElementById('canvas');
-                        var ctx = canvas.getContext('2d');
-                        //キャンバスのサイズを画像サイズに合わせる
-                        canvas.width = loadimage.width;
-                        canvas.height = loadimage.height;
-                        //キャンバスに画像を描画（開始位置0,0）
-                        ctx.drawImage(loadimage, 0, 0);
-                        // DataUrlをクリア
-                        document.getElementsByName('dataurl')[0].value = "";
+                loadimage.onload = (function () {
+                    //画像ロードが完了してからキャンバスの準備をする
+                    var canvas = document.getElementById('canvas');
+                    var ctx = canvas.getContext('2d');
+                    //キャンバスのサイズを画像サイズに合わせる
+                    canvas.width = loadimage.width;
+                    canvas.height = loadimage.height;
+                    //キャンバスに画像を描画（開始位置0,0）
+                    ctx.drawImage(loadimage, 0, 0);
+                    // DataUrlをクリア
+                    document.getElementsByName('dataurl')[0].value = "";
 
-                    });
-                }            
+                });
             }
         }	       
 
