@@ -252,7 +252,9 @@
                 console.log("RESULT: " + text);
             });
 
+		console.log(copyFlag);
             if(copyFlag === true){
+console.log('複製');		    
                 // 複製
                 var oldid = document.getElementsByName("oldwidghtId")[0].value;
                 if(oldid){
@@ -268,6 +270,7 @@
                     await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
                 }
             }else{
+console.log('新規登録');
                 // 新規登録
                 await miro.board.widgets.create({ type: 'image', scale: 0.8, url: api_uri + emploee_id + '.png', metadata:{[client_id] :{staffid: emploee_id, staffName: emploee_name, working_hour: working_hour}}});
             }
