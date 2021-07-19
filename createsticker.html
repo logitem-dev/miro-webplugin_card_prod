@@ -248,7 +248,7 @@
             var oldid = document.getElementsByName("oldwidghtId")[0].value;
             if(oldid){
                 // 既存カードの編集の場合
-                var oldwidget = await miro.board.widgets.get({id: '3074457361513942983'});
+                var oldwidget = await miro.board.widgets.get({id: oldid});
                 // 元カードの削除
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
