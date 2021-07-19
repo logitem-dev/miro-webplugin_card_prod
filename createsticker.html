@@ -60,7 +60,7 @@
         let images = selectedWidgets.filter((widget) => widget.type === 'IMAGE');
 
         if(images !== null){
-            var tojson = JSON.stringify(selectedWidgets[0].metadata);
+            var tojson = JSON.stringify(images[0].metadata);
             var fromjson = JSON.parse(tojson);
 
             if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
