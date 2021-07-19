@@ -40,7 +40,7 @@
 	作業時間  ：<input type='text' name="working_hour" onchange="drawText(this.name, 160)"><br><br>
 
 	<input type='hidden' name='dataurl'><br>
-    <input type='text' name='oldwidghtId'><br>
+    <input type='hidden' name='oldwidghtId'><br>
 
 	<button type="button" onclick='createWidgets()'>アップロード</button>
 	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
@@ -277,7 +277,7 @@
             });
 
             document.body.style.cursor = 'auto'; 
-            
+
             // ModalWindowを閉じる
             miro.board.ui.closeModal()
 
