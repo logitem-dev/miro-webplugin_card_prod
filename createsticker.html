@@ -85,8 +85,8 @@
 	<input type='hidden' name='dataurl'><br>
     <input type='hidden' name='oldwidghtId'><br>
 
-	<button type="button" name='register' onclick='UploadAndRegister(false)'>登録</button>
-    <button type="button" name='copy' onclick='UploadAndRegister(true)' disabled>複製</button>
+	<button type="button" name='register' onclick='UploadAndRegister()'>登録</button>
+    <button type="button" name='copy' onclick='UploadAndRegister()' disabled>複製</button>
 	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
     </div>    
 
@@ -266,7 +266,7 @@
         }
 
         // 画像ファイルをアップロードしてImageWidgetを作成する
-        async function UploadAndRegister(copyFlag){
+        async function UploadAndRegister(){
 
             if(confirm('データをアップロードします。よろしいですか？') === false) {
 	            return false;
@@ -296,35 +296,21 @@
                         
                     }
                 });
-            }
-
-            if(copyFlag === true){
-                // 複製(新規登録)
 
                 if(oldid){
                     if(confirm('社員番号' + emploeeId + 'のカードはすでに存在します。上書き保存しますか？') === false) {
                         document.body.style.cursor = 'auto'; 
                         return false;
                     }
-                    // 上書き保存
-                    await createWidget(emploeeId, oldid);
-                }else{
-                    // 新規登録
-                    await createWidget(emploeeId, '');
-                }
 
             }else{
-                // 上書き保存
-                if(oldid){
-                    if(confirm('カードを上書き保存します。よろしいですか？') === false) {
+                if(confirm('カードを上書き保存します。よろしいですか？') === false) {
                         document.body.style.cursor = 'auto'; 
                         return false;
-                    }
-                }
-
-                await createWidget(emploeeId, oldid);
+                    }                
             }
 
+            await createWidget(emploeeId, oldid);
 
             // 一時ファイルの削除
             await fetch(api_uri + emploeeId  + '.png' , {
