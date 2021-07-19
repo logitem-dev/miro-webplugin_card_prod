@@ -256,7 +256,7 @@
                 // 複製(新規登録)
 
                 // 同一社員番号のカードが存在しないか確認する
-                var staffIds;
+                var staffIds = [];
 
                 var newStaffid = document.getElementsByName("emploee_id")[0].value;
                 var allImages = await miro.board.widgets.get({type: 'IMAGE'});
