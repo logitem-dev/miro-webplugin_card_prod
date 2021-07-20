@@ -281,14 +281,16 @@
             var oldid = document.getElementsByName("oldwidghtId")[0].value;
 
             if(copyFlag === false){
+                // 登録(上書き保存)
                 if(confirm('カードを上書き保存します。よろしいですか？') === false) {
                     document.body.style.cursor = 'auto'; 
                     return false;
                 }
-            }
+            }else{
+                // 複製時
+                oldid = "";
 
-            // 既存の同一社員番号のカードが存在しないか確認する
-            if(!oldid){
+                // 既存の同一社員番号のカードが存在しないか確認する
                 var allImages = await miro.board.widgets.get({type: 'IMAGE'});
 
                 allImages.forEach(image => {
@@ -304,7 +306,7 @@
                     }
                 });
 
-                if(oldid && copyFlag === true){
+                if(oldid){
                     if(confirm('社員番号' + emploeeId + 'のカードはすでに存在します。上書き保存しますか？') === false) {
                     document.body.style.cursor = 'auto'; 
                     return false;
