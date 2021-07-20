@@ -280,16 +280,14 @@
             // 選択されたカードがある場合は旧WidgetIdを取得
             var oldid = document.getElementsByName("oldwidghtId")[0].value;
 
-            if(copyFlag === false){
+            if(copyFlag === false && oldid){
                 // 登録(上書き保存)
-                if(oldid){
-                    if(confirm('カードを上書き保存します。よろしいですか？') === false) {
-                        document.body.style.cursor = 'auto'; 
-                        return false;
-                    }
+                if(confirm('カードを上書き保存します。よろしいですか？') === false) {
+                    document.body.style.cursor = 'auto'; 
+                    return false;
                 }
             }else{
-                // 複製時
+                // 新規登録・複製時
                 oldid = "";
 
                 // 既存の同一社員番号のカードが存在しないか確認する
