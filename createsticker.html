@@ -131,7 +131,7 @@
                 document.getElementsByName("oldwidghtId")[0].value = images[0].id;
                 
                 var loadimage = new Image();
-                await fetch(api_uri + 'loadimage/' + staffid + '.png' , {
+                await fetch(api_uri + 's3/' + staffid + '.png' , {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
