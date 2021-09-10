@@ -30,14 +30,14 @@
     <input type="file" name="selfile" accept='.jpg' required><br>
 
     <div class="canvas-wrapper">
-	<canvas id = "canvas2" width="446" height="250"></canvas>
- 	<canvas id = "canvas" width="446" height="250"></canvas><br>
+	<canvas id = "canvas2" width="446" height="200"></canvas>
+ 	<canvas id = "canvas" width="446" height="200"></canvas><br>
 
     <!-- <img src="" name="image1" height='200' width='167'><br> -->
 
-    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 60)"><br>
-	作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 110)"><br>
-	作業時間  ：<select name="working_hour" onchange="drawText(this.name, 160)">
+    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 35, 30, '')"><br>
+	作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 90, Math.min(555/getBytes(this.value), maxFont) , 'bold ')"><br>
+	作業時間  ：<select name="working_hour" onchange="drawText(this.name, 130, 25, '')">
                     <option value='-'>-</option>
                     <option value='8:00-15:00'>8:00-15:00</option>
                     <option value='8:00-12:00'>8:00-12:00</option>
@@ -144,7 +144,6 @@
                     loadimage.src = objectURL;
                 });
 
-
                 loadimage.onload = (function () {
                     //画像ロードが完了してからキャンバスの準備をする
                     var canvas = document.getElementById('canvas');
@@ -156,7 +155,6 @@
                     ctx.drawImage(loadimage, 0, 0);
                     // DataUrlをクリア
                     document.getElementsByName('dataurl')[0].value = "";
-
                 });
 
             }
@@ -203,30 +201,53 @@
 
             image.addEventListener('load', function(){
                 // 一旦写真の範囲をクリア
-                clearPicture(context, 10, 10, 170, 210);                    
-                context.drawImage(image,20,20, 167, 200);
+                clearPicture(context, 1, 5, 145, 162);                    
+                context.drawImage(image,5,10, 130, 156);
             }, false);
 	    
         
         },false);
 
+		// 文字のバイト数取得(全角を2バイトとする)
+		function getBytes(value){
+		    var length = 0;
+		    for (var i = 0; i < value.length; i++) {
+			    var c = value.charCodeAt(i);
+			    if ((c >= 0x0 && c < 0x81) || (c === 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4)) {
+			        length += 1;
+			    } else {
+			        length += 2;
+			    }
+		    }
+		    return length;
+		}
 
         // Canvas内に文字を表示する
-        function drawText(name, ypos){
+        function drawText(name, ypos, fontsize, font){
+
             var text = document.getElementsByName(name);
 
             var canvas = document.getElementById('canvas');
             var context = canvas.getContext('2d');
 
-            context.font = '40px serif';
+            context.font = font + fontsize + 'px serif';
             context.fillStyle = '#404040';
             // 右寄せで表示
             context.textBaseline = 'center';
             context.textAlign = 'right';
             //座標を指定して文字を描く
-            var x = (canvas.width -30);
+            var x = (canvas.width -15);
             var y = (canvas.offsetTop + ypos);
-       		clearText(context, x-220, ypos - 33);           // 範囲クリア位置調整
+
+			var yclearpos = fontsize-5;
+			var height = fontsize+6;
+			if(name === 'emploee_name'){
+				// 従業員名称は最大フォント数でクリアする範囲を設定
+				yclearpos = maxFont - 5;
+				height = maxFont + 6;
+			
+			}
+       		clearText(context, x-282, ypos - yclearpos, height);           // 範囲クリア位置調整
             context.fillText(text[0].value, x, y);
         }
 
@@ -251,8 +272,8 @@
         }
 
         // 編集用のCanvasから文字をクリアする
-        function clearText(context, x,y){
-            context.clearRect(x, y, 300, 45);
+        function clearText(context, x,y, height){
+            context.clearRect(x, y, 300, height);
         }
 
         // 編集用のCanvasから写真をクリアする
