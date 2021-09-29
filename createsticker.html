@@ -19,81 +19,125 @@
 	    top: 0;
 	    left: 0;
 	}
+	
+	..tab_wrap{width:500px; margin:80px auto;}
+	input[type="radio"]{display:none;}
+	.tab_area{font-size:0; margin:0 10px;}
+	.tab_area label{width:150px; margin:0 5px; display:inline-block; padding:12px 0; color:#999; background:#ddd; text-align:center; font-size:13px; cursor:pointer; transition:ease 0.2s opacity;}
+	.tab_area label:hover{opacity:0.5;}
+	.panel_area{background:#fff;}
+	.tab_panel{width:100%; padding:10px 0; display:none;}
+	.tab_panel p{font-size:14px; letter-spacing:1px; text-align:center;}
+
+	#tab1:checked ~ .tab_area .tab1_label{background:#D7EEFF; color:#000;}
+	#tab1:checked ~ .panel_area #panel1{display:block;}
+	#tab2:checked ~ .tab_area .tab2_label{background:#D7EEFF; color:#000;}
+	#tab2:checked ~ .panel_area #panel2{display:block;}
+	
      </style>
 </head>
     
 <script src="https://miro.com/app/static/sdk.1.1.js"></script>
 <script src="./js/const.js"></script>
-<body onload="loadImage()">
+<body onload="onLoadFunc()">
 <form>
 
-    <input type="file" name="selfile" accept='.jpg' required><br>
+<div class="tab_wrap">
+	<input id="tab1" type="radio" name="tab_btn" checked>
+	<input id="tab2" type="radio" name="tab_btn">
 
-    <div class="canvas-wrapper">
-	<canvas id = "canvas2" width="446" height="200"></canvas>
- 	<canvas id = "canvas" width="446" height="200"></canvas><br>
+	<div class="tab_area" style="display:none;">
+		<label class="tab1_label" for="tab1">カード登録(写真あり)</label>
+		<label class="tab2_label" for="tab2">一括登録(写真なし)</label>
+	</div>
+	<div class="panel_area">
+		<div id="panel1" class="tab_panel">
 
-    <!-- <img src="" name="image1" height='200' width='167'><br> -->
+	    <input type="file" name="selfile" accept='.jpg' required><br>
 
-    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 35, 30, '')"><br>
-	作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 90, Math.min(555/getBytes(this.value), maxFont) , 'bold ')"><br>
-	作業時間  ：<select name="working_hour" onchange="drawText(this.name, 130, 25, '')">
-                    <option value='-'>-</option>
-                    <option value='8:00-15:00'>8:00-15:00</option>
-                    <option value='8:00-12:00'>8:00-12:00</option>
-                    <option value='8:00-13:00'>8:00-13:00</option>
-                    <option value='8:00-14:00'>8:00-14:00</option>
-                    <option value='8:00-15:00'>8:00-15:00</option>
-                    <option value='8:00-16:00'>8:00-16:00</option>
-                    <option value='8:00-17:00'>8:00-17:00</option>
-                    <option value='8:30-16:00'>8:30-16:00</option>
-                    <option value='8:30-17:00'>8:30-17:00</option>
-                    <option value='8:30-17:30'>8:30-17:30</option>
-                    <option value='8:30-14:00'>8:30-14:00</option>
-                    <option value='8:30-15:00'>8:30-15:00</option>
-                    <option value='9:00-14:00'>9:00-14:00</option>
-                    <option value='9:00-14:30'>9:00-14:30</option>
-                    <option value='9:00-15:00'>9:00-15:00</option>
-                    <option value='9:00-16:00'>9:00-16:00</option>
-                    <option value='9:00-12:00'>9:00-12:00</option>
-                    <option value='9:00-13:00'>9:00-13:00</option>
-                    <option value='9:00-14:00'>9:00-14:00</option>
-                    <option value='9:00-15:00'>9:00-15:00</option>
-                    <option value='9:00-15:30'>9:00-15:30</option>
-                    <option value='9:00-16:00'>9:00-16:00</option>
-                    <option value='9:00-17:00'>9:00-17:00</option>
-                    <option value='9:00-18:00'>9:00-18:00</option>
-                    <option value='9:15-15:00'>9:15-15:00</option>
-                    <option value='9:30-16:00'>9:30-16:00</option>
-                    <option value='18:00-24:00'>18:00-24:00</option>
-                    <option value='20:00-5:00'>20:00-5:00</option>
-                    <option value='10:00-13:00'>10:00-13:00</option>
-                    <option value='10:00-14:00'>10:00-14:00</option>
-                    <option value='10:00-15:00'>10:00-15:00</option>
-                    <option value='10:00-16:00'>10:00-16:00</option>
-                    <option value='10:00-17:00'>10:00-17:00</option>
-                    <option value='10:00-18:00'>10:00-18:00</option>
-                    <option value='12:00-16:00'>12:00-16:00</option>
-                    <option value='12:00-17:00'>12:00-17:00</option>
-                    <option value='12:15-17:00'>12:15-17:00</option>
-                    <option value='15:00-18:00'>15:00-18:00</option>
-                    <option value='21:00-6:00'>21:00-6:00</option>
-                    
-                    </select>
-        <br><br>
+	    <div class="canvas-wrapper">
+		<canvas id = "canvas2" width="446" height="200"></canvas>
+	 	<canvas id = "canvas" width="446" height="200"></canvas>
 
-	<input type='hidden' name='dataurl'><br>
-    <input type='hidden' name='oldwidghtId'><br>
+	    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 35, 30, '')"><br>
+		作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 90, Math.min(555/getBytes(this.value), maxFont) , 'bold ')"><br>
+		作業時間  ：<select name="working_hour" onchange="drawText(this.name, 130, 25, '')">
+	                    <option value='-'>-</option>
+	                    <option value='8:00-15:00'>8:00-15:00</option>
+	                    <option value='8:00-12:00'>8:00-12:00</option>
+	                    <option value='8:00-13:00'>8:00-13:00</option>
+	                    <option value='8:00-14:00'>8:00-14:00</option>
+	                    <option value='8:00-15:00'>8:00-15:00</option>
+	                    <option value='8:00-16:00'>8:00-16:00</option>
+	                    <option value='8:00-17:00'>8:00-17:00</option>
+	                    <option value='8:30-16:00'>8:30-16:00</option>
+	                    <option value='8:30-17:00'>8:30-17:00</option>
+	                    <option value='8:30-17:30'>8:30-17:30</option>
+	                    <option value='8:30-14:00'>8:30-14:00</option>
+	                    <option value='8:30-15:00'>8:30-15:00</option>
+	                    <option value='9:00-14:00'>9:00-14:00</option>
+	                    <option value='9:00-14:30'>9:00-14:30</option>
+	                    <option value='9:00-15:00'>9:00-15:00</option>
+	                    <option value='9:00-16:00'>9:00-16:00</option>
+	                    <option value='9:00-12:00'>9:00-12:00</option>
+	                    <option value='9:00-13:00'>9:00-13:00</option>
+	                    <option value='9:00-14:00'>9:00-14:00</option>
+	                    <option value='9:00-15:00'>9:00-15:00</option>
+	                    <option value='9:00-15:30'>9:00-15:30</option>
+	                    <option value='9:00-16:00'>9:00-16:00</option>
+	                    <option value='9:00-17:00'>9:00-17:00</option>
+	                    <option value='9:00-18:00'>9:00-18:00</option>
+	                    <option value='9:15-15:00'>9:15-15:00</option>
+	                    <option value='9:30-16:00'>9:30-16:00</option>
+	                    <option value='18:00-24:00'>18:00-24:00</option>
+	                    <option value='20:00-5:00'>20:00-5:00</option>
+	                    <option value='10:00-13:00'>10:00-13:00</option>
+	                    <option value='10:00-14:00'>10:00-14:00</option>
+	                    <option value='10:00-15:00'>10:00-15:00</option>
+	                    <option value='10:00-16:00'>10:00-16:00</option>
+	                    <option value='10:00-17:00'>10:00-17:00</option>
+	                    <option value='10:00-18:00'>10:00-18:00</option>
+	                    <option value='12:00-16:00'>12:00-16:00</option>
+	                    <option value='12:00-17:00'>12:00-17:00</option>
+	                    <option value='12:15-17:00'>12:15-17:00</option>
+	                    <option value='15:00-18:00'>15:00-18:00</option>
+	                    <option value='21:00-6:00'>21:00-6:00</option>
+	                    
+	                    </select>
+	        <br>
 
-	<button type="button" name='register' onclick='UploadAndRegister(false)'>登録</button>
-    <button type="button" name='copy' onclick='UploadAndRegister(true)' disabled>複製</button>
-	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
-    </div>    
+		<input type='hidden' name='dataurl'>
+	    <input type='hidden' name='oldwidghtId'><br>
 
+		<button type="button" name='register' onclick='UploadAndRegister(false)'>登録</button>
+	    <button type="button" name='copy' onclick='UploadAndRegister(true)' disabled>複製</button>
+	    </div>    
+		</div>
+		<div id="panel2" class="tab_panel">
+			<input type="file" name="selfileBatch" accept='.csv' required><br><br>
+			
+		    <textarea name="csv" rows="10" cols="40" readonly style='display:none'></textarea>
+		    
+			<button type="button" onclick='readCSV()'>一括登録</button>
+		    <div class="canvas-wrapper">
+			 	<canvas id = "canvasBatch" width="446" height="200" style='display:none'></canvas><br>
+			</div>
+			<input type='hidden' name='dataurlBatch'>
+
+		</div>
+	</div>
+</div>
+<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
 </form>
 
 
 <script>
+
+	function onLoadFunc(){
+	
+		loadImage();
+//		loadImageBatch();
+	}
 
     miro.onReady(() => {
         getCardInfo();
@@ -167,7 +211,7 @@
 
         // 初期画像(テキスト等なし)
         var image = new Image();
-        image.src = './img/sticker.png';
+        image.src = './img/white.png';
         image.onload = (function () {
             //画像ロードが完了してからキャンバスの準備をする
             var canvas = document.getElementById('canvas2');
@@ -201,7 +245,7 @@
 
             image.addEventListener('load', function(){
                 // 一旦写真の範囲をクリア
-                clearPicture(context, 1, 5, 145, 162);                    
+                clearPicture(context, 1, 5, 145, 162); 
                 context.drawImage(image,5,10, 130, 156);
             }, false);
 	    
@@ -248,6 +292,7 @@
 			
 			}
        		clearText(context, x-282, ypos - yclearpos, height);           // 範囲クリア位置調整
+
             context.fillText(text[0].value, x, y);
         }
 
@@ -390,23 +435,401 @@
             }).then(function (text) {
                 console.log("RESULT: " + text);
             });
-
+           
             if(oldid){
 
                 // 元カードの削除
                 var oldwidget = await miro.board.widgets.get({id: oldid});
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
-                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
 
-                return;
+            }else{            
+            	
+            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+            	
+            	// 新規作成位置へ移動
+            	var posxArray = [];
+            	var posyArray = [];
+            	var newCardsLst = await getNewCardAreaImage(posxArray, posyArray);
+            	            	
+            	await setNewCardPosition(newcard[0], newCardsLst, posxArray[0], posxArray[1], posyArray[0], posyArray[1]);
+            	
             }
-            await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+            
         }
+        
+	    // 新規カードの配置場所を取得する(通常登録用)
+		async function setNewCardPosition(newcard, newCardsLst, frameX1, frameX2, frameY1, frameY2){
 
+			var posxPos = frameX1;
+			var posyPos = frameY1;
+	        
+	        var irowPos = 0;
+	        var icolPos = 1;
+	        
+	        var cardxPos;
+	        var cardyPos;
+	        
+			while(true){
+			
+		        cardxPos = (posxPos+newcard.bounds.width/2+20);
+		        cardyPos = (posyPos+newcard.bounds.height/2+20);
+			
+				// カードが存在しない位置を探す
+				var cards = newCardsLst.filter(card => card.x === cardxPos && card.y === cardyPos);
+				if(cards.length === 0){
+					break;
+				}
+			
+				posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
+	          
+				if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
+					posxPos = frameX1;
+					icolPos = 1;
+					posyPos = frameY1 + (newcard.bounds.height * ++irowPos);
+				}else{
+					icolPos++;
+				}
+			
+			}
+						
+			miro.board.widgets.transformDelta(newcard, cardxPos - newcard.x, cardyPos - newcard.y);
 
+		}
 
-    </script>        
+		/*************************
+		/ ↓一括登録用のFunction        
+		**************************/
+		async function loadImageBatch(cardName) {
+			const res = await imageOnLoad(cardName).catch(e => {
+				console.log('onload error', e);
+			});
+			//画像ロードが完了してからキャンバスの準備をする
+			var canvas = document.getElementById('canvasBatch');
+			var ctx = canvas.getContext('2d');
+			//キャンバスのサイズを画像サイズに合わせる
+			canvas.width = res.width;
+			canvas.height = res.height;
+			//キャンバスに画像を描画（開始位置0,0）
+			ctx.drawImage(res, 0, 0);
+			// DataUrlをクリア
+			document.getElementsByName('dataurlBatch')[0].value = "";
+		}
+
+		
+		function imageOnLoad(cardName) {
+		  return new Promise((resolve, reject) => {
+		    const img = new Image();
+		    img.onload = () => resolve(img);
+		    img.onerror = (e) => reject(e);
+		    img.src = './img/' + cardName + '.png';
+		  });
+		}
+
+	    //ダイアログでファイルが選択された時
+	    var obj1 = document.getElementsByName("selfileBatch");
+	    obj1[0].addEventListener("change",function(evt){
+
+	        var file = evt.target.files;
+
+	        //FileReaderの作成
+	        var reader = new FileReader();
+	        //テキスト形式で読み込む
+	        reader.readAsText(file[0]);
+	        
+	        //読込終了後の処理
+	        reader.onload = function(ev){
+	        //テキストエリアに表示する
+	        document.forms[0].csv.value = reader.result;
+	        }
+	    },false);
+
+		async function readCSV(){
+		
+			document.body.style.cursor = 'wait';
+
+			var obj1 = document.getElementsByName("csv");
+			let lines = obj1[0].value.split(/\r?\n/);
+			let datas = lines.map(line=> line.split(','));
+
+			// ヘッダ情報の取得
+			let staffIDIndex = await datas[0].indexOf('番号');
+			let companyIndex = await datas[0].indexOf('会社');
+			let nameIndex = await datas[0].indexOf('氏名');
+			let timeFromIndex = await datas[0].indexOf('出勤');
+			let timeToIndex = await datas[0].indexOf('退勤');
+	
+			var cardIdMap = await getBatchCards();
+
+			// 新規作成カード位置取得
+        	var posxArray = [];
+        	var posyArray = [];
+        	var newCardsLst = await getNewCardAreaImage(posxArray, posyArray);
+        	
+        	var frameX1 = posxArray[0];
+        	var frameX2 = posxArray[1];
+        	
+        	var frameY1 = posyArray[0];
+        	var frameY2 = posyArray[1];
+        	
+        	// 登録カードリスト
+			var addedCards = [];        	
+        				
+			for(let i=1; i< datas.length; i++){
+				var d = datas[i];
+				
+				var staffId = d[staffIDIndex];
+				
+				var oldWidgetId = cardIdMap.get(staffId);
+				
+				if(d[0].length > 0){
+				
+					// 会社ごとにカードの色を変更
+					var cardName = "sticker";
+					switch (d[companyIndex]){
+						case "バイトレ":
+							cardName = "green";
+							break;
+							
+						case "フルキャスト":
+							cardName = "red";
+							break;
+							
+						case "ヒロスタッフ":
+							cardName = "blue";
+							break;
+
+						default:
+							cardName = "sticker";
+							break;
+							
+					}
+					await loadImageBatch(cardName);
+				
+					var workinghour = d[timeFromIndex] + "-" + d[timeToIndex];
+					await drawTextBatch("emploee_id", d[companyIndex] + " " + staffId, 35, 30, '');											// 会社記号＋スタッフ番号
+					await drawTextBatch("emploee_name", d[nameIndex], 90, Math.min(555/getBytes(d[nameIndex]), maxFont), 'bold ');			// スタッフ氏名
+					await drawTextBatch("working_hour", workinghour , 130, 25, '');
+					
+					var newcard = await createWidgetsBatch(staffId, d[nameIndex], workinghour, oldWidgetId);
+					addedCards.push(newcard[0]);
+					
+				}
+			}
+			
+			// 新規登録フレームへ移動
+			await setNewCardPositionBatch(addedCards, newCardsLst, frameX1, frameX2, frameY1, frameY2);
+			
+			document.body.style.cursor = 'auto';
+			
+	        // ModalWindowを閉じる
+	        miro.board.ui.closeModal();
+		
+		}
+		
+		// 連続登録用の既存のカードをすべて取得する
+		async function getBatchCards(){
+		
+	        // ボード上のカードからバッチ登録用カードを取得する
+	        var allImages = await miro.board.widgets.get({type: 'IMAGE'});
+	        var cardIdMap = new Map();
+	        
+	        allImages.forEach(image => {
+
+	            var tojson = JSON.stringify(image.metadata);
+	            var fromjson = JSON.parse(tojson);
+	            
+	            if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
+	            	var staffId = fromjson[client_id]['staffid'];
+	            	if(staffId.startsWith("9")){
+						cardIdMap.set(staffId, image.id);
+		            }
+	            }
+	        });
+	        
+			return cardIdMap;
+	        
+		}
+
+	    // Canvas内に文字を表示する(連続登録用)
+	    function drawTextBatch(name, text, ypos, fontsize, font){
+
+	        var canvas = document.getElementById('canvasBatch');
+	        var context = canvas.getContext('2d');
+
+	        context.font = font + fontsize + 'px Vardana';
+	        context.fillStyle = '#404040';
+	        // 右寄せで表示
+	        context.textBaseline = 'center';
+	        context.textAlign = 'right';
+	        //座標を指定して文字を描く
+	        var x = (canvas.width -15);
+	        var y = (canvas.offsetTop + ypos);
+	        
+	        context.fillText(text, x, y);
+	    }
+
+		
+	    // Widgetを作成して画面を閉じる
+	    async function createWidgetsBatch(emploeeId, emploeeName, workingHour, oldWidgetId){
+	    
+	    	document.getElementsByName('dataurlBatch')[0].value = await document.getElementById('canvasBatch').toDataURL();
+
+	        setTimeout(function(){
+	            if(document.getElementsByName('dataurlBatch')[0].value === ""){
+	                return false;
+	            }
+	        })
+
+	        // 合成された画像の一時ファイルを作成
+	        var dataurl = document.getElementsByName('dataurlBatch')[0].value;
+	        await fetch(api_uri , {
+	            method: 'POST',
+	            headers: {
+	                'Accept': 'application/json',
+	                'Content-Type': 'application/json'
+	            },
+	            body: JSON.stringify({'emploee_id' : emploeeId , 'dataurl' : dataurl })
+	        }).then(function (response) {
+	            console.log(response.text());
+	        }).then(function (text) {
+	            console.log("RESULT: " + text);
+	        });
+	        
+	        var newcard;
+
+			// 同一IDのカードが存在する場合は削除
+			if(oldWidgetId != null){
+				newcard = await miro.board.widgets.deleteById(oldWidgetId);
+			}
+			                
+	        // Widgetの作成
+	        newcard = await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+
+	        
+	        // 一時ファイルの削除
+	        await fetch(api_uri + emploeeId  + '.png' , {
+	            method: 'DELETE',
+	            headers: {
+	                'Accept': 'application/json',
+	                'Content-Type': 'application/json'
+	            },
+	            body: '{}'
+	        }).then(function (response) {
+	            console.log(response.text());
+	        }).then(function (text) {
+	            console.log("RESULT: " + text);
+	        });
+	        
+	        
+	        // 送信用画像情報をクリア
+	        var canvas = await document.getElementById('canvasBatch');
+	        var context = await canvas.getContext('2d');
+			await context.clearRect(0, 0, 446, 200);
+	        
+//			await loadImageBatch();
+			return newcard;
+	                
+	    }
+	    
+	    // 新規作成フレーム上にあるカードを取得する(通常登録、連続登録共通)
+	    async function getNewCardAreaImage(posxArray, posyArray){
+
+	    	// 新規登録用のフレームの位置を取得
+			let frameNew = await miro.board.widgets.get({title: '新規作成'});
+			
+			var frameX1 = frameNew[0].bounds.x - frameNew[0].bounds.width/2;
+            var frameX2 = frameNew[0].bounds.x + frameNew[0].bounds.width/2;
+			var frameY1 = frameNew[0].bounds.y - frameNew[0].bounds.height/2;
+			var frameY2 = frameNew[0].bounds.y + frameNew[0].bounds.height/2;
+			
+			
+			// 全イメージの取得
+			var allImages = await miro.board.widgets.get({type: 'IMAGE'});
+			
+			// 新規登録フレーム上にあるスタッフカードのみ抽出
+			var newCards = [];
+	        allImages.forEach(image => {
+
+	            var tojson = JSON.stringify(image.metadata);
+	            var fromjson = JSON.parse(tojson);
+	            
+	            if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
+	            	// カードがフレームの範囲内に収まっているか
+					if(image.x >= frameX1 && image.x <= frameX2 && image.y >= frameY1 && image.y <= frameY2){
+						newCards.push(image);
+					}
+	            }
+	        });
+	        
+			posxArray.push(frameX1);
+			posxArray.push(frameX2);
+			posyArray.push(frameY1);
+			posyArray.push(frameY2);
+	        
+	        return newCards;
+	    
+	    }
+	    
+	    // 新規カードの配置場所を取得する(連続登録用)
+		async function setNewCardPositionBatch(addedCards, newCardsLst, frameX1, frameX2, frameY1, frameY2){
+
+			var posxPos = frameX1;
+			var posyPos = frameY1;
+	        
+	        var irowPos = 0;
+	        var icolPos = 1;
+	        
+	        var cardxPos;
+	        var cardyPos;
+	        
+			while(true){
+			
+		        cardxPos = (posxPos+addedCards[0].bounds.width/2+20);
+		        cardyPos = (posyPos+addedCards[0].bounds.height/2+20);
+			
+				// カードが存在しない位置を探す
+				var cards = newCardsLst.filter(card => card.x === cardxPos && card.y === cardyPos);
+				if(cards.length === 0){
+					break;
+				}
+				
+				posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
+	          
+				if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
+					posxPos = frameX1;
+					icolPos = 1;
+					posyPos = frameY1 + (newcard.bounds.height * ++irowPos);
+				}else{
+					icolPos++;
+				}
+				
+			}
+					        
+			for(let i=0; i< addedCards.length; i++){
+	        	var newcard = addedCards[i];
+	        	
+				await miro.board.widgets.transformDelta(newcard, cardxPos - newcard.x, cardyPos - newcard.y);
+	        	
+				posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
+	          
+				if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
+					posxPos = frameX1;
+					icolPos = 1;
+					posyPos = frameY1 + (newcard.bounds.height * ++irowPos);
+				}else{
+					icolPos++;
+				}
+				
+		        cardxPos = (posxPos+newcard.bounds.width/2+20);
+		        cardyPos = (posyPos+newcard.bounds.height/2+20);
+	        	
+			}
+
+		}
+	    
+    </script>
   </body>    
     
 </html>
