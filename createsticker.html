@@ -442,11 +442,11 @@
                 var oldwidget = await miro.board.widgets.get({id: oldid});
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
-                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
 
             }else{            
             	
-            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
             	
             	// 新規作成位置へ移動
             	var posxArray = [];
@@ -705,7 +705,7 @@
 			}
 			                
 	        // Widgetの作成
-	        newcard = await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+	        newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
 
 	        
 	        // 一時ファイルの削除
