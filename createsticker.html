@@ -452,6 +452,10 @@
             	var posxArray = [];
             	var posyArray = [];
             	var newCardsLst = await getNewCardAreaImage(posxArray, posyArray);
+            	
+            	if(newCardsLst == null){
+            		return;
+            	}
             	            	
             	await setNewCardPosition(newcard[0], newCardsLst, posxArray[0], posxArray[1], posyArray[0], posyArray[1]);
             	
@@ -738,6 +742,11 @@
 
 	    	// 新規登録用のフレームの位置を取得
 			let frameNew = await miro.board.widgets.get({title: '新規作成'});
+			
+			if(frameNew[0] == null){
+				// 新規登録フレームが存在しない場合は処理終了
+				return;
+			}
 			
 			var frameX1 = frameNew[0].bounds.x - frameNew[0].bounds.width/2;
             var frameX2 = frameNew[0].bounds.x + frameNew[0].bounds.width/2;
