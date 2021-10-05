@@ -52,13 +52,13 @@
       let idIndex = await datas[0].indexOf('社員番号');
 
       // 当日のデータのみ抽出
-      var d = new Date();
-      var today = d.getFullYear() + "/" + ('0' + (d.getMonth() + 1)).slice(-2) + "/" + ('0' + (d.getDate())).slice(-2);
-      let todayData = datas.filter(d=> d[dateIndex] == today);
+//      var d = new Date();
+//      var today = d.getFullYear() + "/" + ('0' + (d.getMonth() + 1)).slice(-2) + "/" + ('0' + (d.getDate())).slice(-2);
+//      let todayData = datas.filter(d=> d[dateIndex] == today);
 
       // 出勤フラグでデータを振り分ける
-      var listOn = await todayData.filter(d=> d[attendIndex] === '1').map(d=> d[idIndex]);
-      var listOff = await todayData.filter(d=> d[attendIndex] === '0').map(d=> d[idIndex]);
+      var listOn = await datas.filter(d=> d[attendIndex] === '1').map(d=> d[idIndex]);
+      var listOff = await datas.filter(d=> d[attendIndex] === '0').map(d=> d[idIndex]);
       
       await resetCards(listOn, listOff);
 	
