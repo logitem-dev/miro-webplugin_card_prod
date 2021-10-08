@@ -12,6 +12,7 @@
 	<input type="file" name="selfile" accept='.csv' required><br><br>
 
     <textarea name="csv" rows="10" cols="40" readonly style='display:none'></textarea>
+	<div id="output" style="color:red; font-weight:bold; display:none;">アップロードが正常に完了しました。</div></br>
 
 	<button type="button" onclick='readCSV()'>アップロード</button>
 	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
@@ -63,7 +64,7 @@
       await resetCards(listOn, listOff);
 	
       // ModalWindowを閉じる
-      miro.board.ui.closeModal();
+//      miro.board.ui.closeModal();
 	
     }
 
@@ -73,6 +74,8 @@
       let needToClear = confirm("勤怠ファイルを読み込みボードを初期化します。よろしいですか？");
 
       if(needToClear){
+      
+      	document.body.style.cursor = 'wait';
 
         // 全従業員カードオブジェクトの取得
         let allCards = await miro.board.widgets.get({type: 'IMAGE'})
@@ -111,67 +114,98 @@
         let icolOut = 1;
 
         let posxOut = xOut;
-        let posyOut = yOut;         
+        let posyOut = yOut;   
+        
+   		const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime) );
+   		
+		var errMessage = document.getElementById("output");
         
 
         // カードオブジェクトを出勤者・休暇者Frame上に移動
-        allCards.forEach(card => {
+        //allCards.forEach(card => {
+		for(let i=0; i< allCards.length; i++){
+			var card = allCards[i];
+				        
+			if(i >0 && i % 10 == 0){
+				await sleep(5000);
+			}
+        
+			var tojson = JSON.stringify(card.metadata);
+			var fromjson = JSON.parse(tojson);
 
-          var tojson = JSON.stringify(card.metadata);
-          var fromjson = JSON.parse(tojson);
+			if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
+				if(listOn.includes(fromjson[client_id]['staffid'])){
 
-          if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
-            if(listOn.includes(fromjson[client_id]['staffid'])){
-            
-              // 出勤者
-              miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y);
+					// 出勤者
+					miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y)
+							.catch(error=> {
+								document.body.style.cursor = 'auto';
+								//miro.showNotification('ボードの初期化に失敗しました。');
+								errMessage.innerHTML = "ボードの初期化に失敗しました";
 
-              posxOn = xOn + (card.bounds.width + 20) * icolOn;
-              
-              if(posxOn + card.bounds.width > xOn2 - 20){       // Frameの横幅を超ええる場合は改行
-                posxOn = xOn;
-                icolOn = 1;
-                posyOn = yOn + (card.bounds.height * ++irowOn);
-              }else{
-                icolOn++;                
-              }
+							});
 
-            }else if(listOff.includes(fromjson[client_id]['staffid'])){
+					posxOn = xOn + (card.bounds.width + 20) * icolOn;
+				  
+					if(posxOn + card.bounds.width > xOn2 - 20){       // Frameの横幅を超ええる場合は改行
+						posxOn = xOn;
+						icolOn = 1;
+						posyOn = yOn + (card.bounds.height * ++irowOn);
+					}else{
+						icolOn++;                
+					}
 
-              // 休暇者
-              miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y);
+				}else if(listOff.includes(fromjson[client_id]['staffid'])){
 
-              posxOff = xOff + (card.bounds.width + 20) * icolOff;
-              
-              if(posxOff + card.bounds.width > xOff2 - 20){       // Frameの横幅を超ええる場合は改行
-                posxOff = xOff;
-                icolOff = 1;
-                posyOff = yOff + (card.bounds.height * ++irowOff);
-              }else{
-                icolOff++;                
-              }
+					// 休暇者
+					miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y)
+							.catch(error=> {
+								document.body.style.cursor = 'auto';
+								//miro.showNotification('ボードの初期化に失敗しました。');
+								errMessage.innerHTML = "ボードの初期化に失敗しました";
+								//closeWindow();
+							});
+					
 
-            }else{
-              // 管理外
-              miro.board.widgets.transformDelta(card, (posxOut+card.bounds.width/2+20)-card.x, (posyOut+card.bounds.height/2+20)-card.y);
+					posxOff = xOff + (card.bounds.width + 20) * icolOff;
+				  
+					if(posxOff + card.bounds.width > xOff2 - 20){       // Frameの横幅を超ええる場合は改行
+						posxOff = xOff;
+						icolOff = 1;
+						posyOff = yOff + (card.bounds.height * ++irowOff);
+					}else{
+						icolOff++;                
+					}
 
-              posxOut = xOut + (card.bounds.width + 20) * icolOut;
-              
-              if(posxOut + card.bounds.width > xOut2 - 20){       // Frameの横幅を超ええる場合は改行
-                posxOut = xOut;
-                icolOut = 1;
-                posyOut = yOut + (card.bounds.height * ++irowOut);
-              }else{
-                icolOut++;                
-              }
+				}else{
+					// 管理外
+					miro.board.widgets.transformDelta(card, (posxOut+card.bounds.width/2+20)-card.x, (posyOut+card.bounds.height/2+20)-card.y)
+							.catch(error=> {
+								document.body.style.cursor = 'auto';
+								//miro.showNotification('ボードの初期化に失敗しました。');
+								errMessage.innerHTML = "ボードの初期化に失敗しました";
+								//closeWindow();
+							});
 
-            }
+					posxOut = xOut + (card.bounds.width + 20) * icolOut;
+				  
+					if(posxOut + card.bounds.width > xOut2 - 20){       // Frameの横幅を超ええる場合は改行
+						posxOut = xOut;
+						icolOut = 1;
+						posyOut = yOut + (card.bounds.height * ++irowOut);
+					}else{
+						icolOut++;                
+					}
 
-          }
-        });
+				}
 
-        // Show success message
-          miro.showNotification('ボードを初期化しました。')  
+			}
+				
+        }
+
+		document.body.style.cursor = 'auto';
+		errMessage.style.display='block';
+		
       }
     }
 
