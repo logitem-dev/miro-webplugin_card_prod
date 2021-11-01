@@ -107,7 +107,7 @@
         let allFrames = await miro.board.widgets.get({type: 'FRAME'});
         
         // 初期化用のフレームのみ取得
-        let frames = allFrames.filter(frame=> frame.title.indexOf('出勤者') != -1 || frame.title.indexOf('休暇者') != -1 || frame.title.indexOf('管理外') != -1);
+        let frames = allFrames.filter(frame=> frame.title.indexOf('出勤者') != -1 || frame.title.indexOf('休暇') != -1 || frame.title.indexOf('管理外') != -1);
       
         for(var i=0; i< frames.length; i++){
 
@@ -135,7 +135,7 @@
 		}
 		
 		// 休暇者、管理外フレームの取得(出勤者、管理外はフレームは2021/10時点で一つのみ)
-		var frameOff = initFrames.filter(f=> f.name === "休暇者");
+		var frameOff = initFrames.filter(f=> f.name === "休暇");
 		var frameOut = initFrames.filter(f=> f.name === "管理外");
 		
         // カードオブジェクトを出勤者・休暇者Frame上に移動
