@@ -51,6 +51,7 @@
       let dateIndex = await datas[0].indexOf('日付');
       let attendIndex = await datas[0].indexOf('出勤');
       let idIndex = await datas[0].indexOf('社員番号');
+      let initialposIndex = await datas[0].indexOf('初期位置');
 
       // 当日のデータのみ抽出
 //      var d = new Date();
@@ -58,8 +59,12 @@
 //      let todayData = datas.filter(d=> d[dateIndex] == today);
 
       // 出勤フラグでデータを振り分ける
-      var listOn = await datas.filter(d=> d[attendIndex] === '1').map(d=> d[idIndex]);
+      var listOn = new Map();
+      await datas.filter(d=> d[attendIndex] === '1').forEach(d=> {
+      	listOn.set(d[idIndex], d[initialposIndex]);
+      });
       var listOff = await datas.filter(d=> d[attendIndex] === '0').map(d=> d[idIndex]);
+      
       
       await resetCards(listOn, listOff);
 	
@@ -68,7 +73,23 @@
 	
     }
 
-    async function resetCards(listOn, listOff){
+    async function resetCards(listOnMap, listOff){
+
+	  // Frame用のクラス    
+      const frameclass = class{
+        constructor(name, x1, x2, y, row, col, posx, posy){
+          this.name = name;
+          this.x1 = x1;
+          this.x2 = x2;
+          this.y = y;
+          this.row = row;
+          this.col = col;
+          this.posx = posx;
+          this.posy = posy;
+        }
+        
+      }
+    
 
       // 確認メッセージ表示
       let needToClear = confirm("勤怠ファイルを読み込みボードを初期化します。よろしいですか？");
@@ -76,51 +97,47 @@
       if(needToClear){
       
       	document.body.style.cursor = 'wait';
+      	
+        var initFrames = [];
 
         // 全従業員カードオブジェクトの取得
-        let allCards = await miro.board.widgets.get({type: 'IMAGE'})
+        let allCards = await miro.board.widgets.get({type: 'IMAGE'});
 
-        // 初期化位置の取得(出勤者)
-        let frameOn = await miro.board.widgets.get({title: '出勤者'});
-        let xOn = frameOn[0].x - (frameOn[0].width / 2);
-        let yOn = frameOn[0].y - (frameOn[0].height / 2);
-        let xOn2 =  frameOn[0].x + (frameOn[0].width / 2);
-
-        let irowOn = 0;
-        let icolOn = 1;
-
-        let posxOn = xOn;
-        let posyOn = yOn;	          
+        // 全フレームの取得
+        let allFrames = await miro.board.widgets.get({type: 'FRAME'});
         
-        // 初期化位置の取得(休暇者)
-        let frameOff = await miro.board.widgets.get({title: '休暇'});
-        let xOff = frameOff[0].x - (frameOff[0].width / 2);
-        let yOff = frameOff[0].y - (frameOff[0].height / 2);
-        let xOff2 = frameOff[0].x + (frameOff[0].width / 2);
+        // 初期化用のフレームのみ取得
+        let frames = allFrames.filter(frame=> frame.title.indexOf('出勤者') != -1 || frame.title.indexOf('休暇者') != -1 || frame.title.indexOf('管理外') != -1);
+      
+        for(var i=0; i< frames.length; i++){
 
-        let irowOff = 0;
-        let icolOff = 1;
+			initFrames.push(new frameclass(frames[i].title,								// name
+								frames[i].x - (frames[i].width / 2),			// x1
+								frames[i].x + (frames[i].width / 2),			// x2
+								frames[i].y - (frames[i].height / 2),			// y
+								0,												// row
+								1,												// col
+								frames[i].x - (frames[i].width / 2),			// posx
+								frames[i].y - (frames[i].height / 2)			// posy
+								)
+							);
 
-        let posxOff = xOff;
-        let posyOff = yOff;         
-        
-        // 初期化位置の取得(管理外)
-        let frameOut = await miro.board.widgets.get({title: '管理外'});
-        let xOut = frameOut[0].x - (frameOut[0].width / 2);
-        let yOut = frameOut[0].y - (frameOut[0].height / 2);
-        let xOut2 = frameOut[0].x + (frameOut[0].width / 2);
+        }
 
-        let irowOut = 0;
-        let icolOut = 1;
-
-        let posxOut = xOut;
-        let posyOut = yOut;   
-        
    		const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime) );
    		
 		var errMessage = document.getElementById("output");
-        
-
+		
+		// 出勤者のIDのみ抽出(出勤者は複数初期化位置がある)
+		var listOn = [];
+		for (const [key, value] of listOnMap) {
+		  listOn.push(key);
+		}
+		
+		// 休暇者、管理外フレームの取得(出勤者、管理外はフレームは2021/10時点で一つのみ)
+		var frameOff = initFrames.filter(f=> f.name === "休暇者");
+		var frameOut = initFrames.filter(f=> f.name === "管理外");
+		
         // カードオブジェクトを出勤者・休暇者Frame上に移動
         //allCards.forEach(card => {
 		for(let i=0; i< allCards.length; i++){
@@ -135,9 +152,25 @@
 
 			if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
 				if(listOn.includes(fromjson[client_id]['staffid'])){
-
+				
+					// 出勤者初期位置Suffixの取得
+					var suffix = listOnMap.get(fromjson[client_id]['staffid']);
+					
+					var initFrameName = "出勤者";
+					
+					if(suffix !== ""){
+						initFrameName = initFrameName + "_"  + suffix;
+					}
+					
+					var initFrame = initFrames.filter(f=> f.name.toUpperCase() === initFrameName.toUpperCase());
+					
+					// 該当する初期位置フレームが存在しない場合は出勤者フレームへ
+					if(initFrame.length === 0){
+						initFrame = initFrames.filter(f=> f.name === "出勤者");
+					}
+					
 					// 出勤者
-					miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y)
+					miro.board.widgets.transformDelta(card, (initFrame[0].posx+card.bounds.width/2+20)-card.x, (initFrame[0].posy+card.bounds.height/2+20)-card.y)
 							.catch(error=> {
 								document.body.style.cursor = 'auto';
 								//miro.showNotification('ボードの初期化に失敗しました。');
@@ -145,20 +178,20 @@
 
 							});
 
-					posxOn = xOn + (card.bounds.width + 20) * icolOn;
+					initFrame[0].posx = initFrame[0].x1 + (card.bounds.width + 20) * initFrame[0].col;
 				  
-					if(posxOn + card.bounds.width > xOn2 - 20){       // Frameの横幅を超ええる場合は改行
-						posxOn = xOn;
-						icolOn = 1;
-						posyOn = yOn + (card.bounds.height * ++irowOn);
+					if(initFrame[0].posx + card.bounds.width > initFrame[0].x2 - 20){       // Frameの横幅を超ええる場合は改行
+						initFrame[0].posx = initFrame[0].x1;
+						initFrame[0].col = 1;
+						initFrame[0].posy = initFrame[0].y + (card.bounds.height * ++initFrame[0].row);
 					}else{
-						icolOn++;                
+						initFrame[0].col++;                
 					}
 
 				}else if(listOff.includes(fromjson[client_id]['staffid'])){
 
 					// 休暇者
-					miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y)
+					miro.board.widgets.transformDelta(card, (frameOff[0].posx+card.bounds.width/2+20)-card.x, (frameOff[0].posy+card.bounds.height/2+20)-card.y)
 							.catch(error=> {
 								document.body.style.cursor = 'auto';
 								//miro.showNotification('ボードの初期化に失敗しました。');
@@ -167,19 +200,19 @@
 							});
 					
 
-					posxOff = xOff + (card.bounds.width + 20) * icolOff;
+					frameOff[0].posx = frameOff[0].x1 + (card.bounds.width + 20) * frameOff[0].col;
 				  
-					if(posxOff + card.bounds.width > xOff2 - 20){       // Frameの横幅を超ええる場合は改行
-						posxOff = xOff;
-						icolOff = 1;
-						posyOff = yOff + (card.bounds.height * ++irowOff);
+					if(frameOff[0].posx + card.bounds.width > frameOff[0].x2 - 20){       // Frameの横幅を超ええる場合は改行
+						frameOff[0].posx = frameOff[0].x1;
+						frameOff[0].col = 1;
+						frameOff[0].posy = frameOff[0].y + (card.bounds.height * ++frameOff[0].row);
 					}else{
-						icolOff++;                
+						frameOff[0].col++; 
 					}
 
 				}else{
 					// 管理外
-					miro.board.widgets.transformDelta(card, (posxOut+card.bounds.width/2+20)-card.x, (posyOut+card.bounds.height/2+20)-card.y)
+					miro.board.widgets.transformDelta(card, (frameOut[0].posx+card.bounds.width/2+20)-card.x, (frameOut[0].posy+card.bounds.height/2+20)-card.y)
 							.catch(error=> {
 								document.body.style.cursor = 'auto';
 								//miro.showNotification('ボードの初期化に失敗しました。');
@@ -187,14 +220,14 @@
 								//closeWindow();
 							});
 
-					posxOut = xOut + (card.bounds.width + 20) * icolOut;
+					frameOut[0].posx = frameOut[0].x1 + (card.bounds.width + 20) * frameOut[0].col;
 				  
-					if(posxOut + card.bounds.width > xOut2 - 20){       // Frameの横幅を超ええる場合は改行
-						posxOut = xOut;
-						icolOut = 1;
-						posyOut = yOut + (card.bounds.height * ++irowOut);
+					if(frameOut[0].posx + card.bounds.width > frameOut[0].x2 - 20){       // Frameの横幅を超ええる場合は改行
+						frameOut[0].posx = frameOut[0].x1;
+						frameOut[0].col = 1;
+						frameOut[0].posy = frameOut[0].y + (card.bounds.height * ++frameOut[0].row);
 					}else{
-						icolOut++;                
+						frameOut[0].col++;
 					}
 
 				}
