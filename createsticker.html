@@ -39,14 +39,14 @@
     
 <script src="https://miro.com/app/static/sdk.1.1.js"></script>
 <script src="./js/const.js"></script>
-<body onload="onLoadFunc()">
+<body bgcolor='#9BF9CC' onload="onLoadFunc()">
 <form>
 
 <div class="tab_wrap">
 	<input id="tab1" type="radio" name="tab_btn" checked>
 	<input id="tab2" type="radio" name="tab_btn">
 
-	<div class="tab_area" style="display:none;">
+	<div class="tab_area">
 		<label class="tab1_label" for="tab1">カード登録(写真あり)</label>
 		<label class="tab2_label" for="tab2">一括登録(写真なし)</label>
 	</div>
@@ -58,6 +58,7 @@
 	    <div class="canvas-wrapper">
 		<canvas id = "canvas2" width="446" height="200"></canvas>
 	 	<canvas id = "canvas" width="446" height="200"></canvas>
+	 	<canvas id = "canvasBadge" width="446" height="200"></canvas>
 
 	    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 35, 30, '')"><br>
 		作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 90, Math.min(555/getBytes(this.value), maxFont) , 'bold ')"><br>
@@ -104,7 +105,32 @@
 	                    <option value='21:00-6:00'>21:00-6:00</option>
 	                    
 	                    </select>
+				休憩時間  ：<select name="rest_hour" onchange="drawText(this.name, 130, 25, '')">
+			                    <option value='-'>-</option>
+			                    <option value='0'>0</option>
+			                    <option value='45'>45</option>
+			                    <option value='60'>60</option>
+			                </select>
 	        <br>
+	        
+			<div>
+				<span class="col-1"><input type="checkbox" id='badge1' onclick='showBadge(this.id, 1)'>フォークリフト</span>
+				<span class="col-1"><input type="checkbox" id='badge2' onclick='showBadge(this.id, 2)'>ハイピックランナー</span>
+			</div>
+			<div>
+				<span class="col-1"><input type="checkbox" id='badge3' onclick='showBadge(this.id, 3)'>ピッキオ</span>
+				<span class="col-1"><input type="checkbox" id='badge4' onclick='showBadge(this.id, 4)'>楽ノリ君</span>
+			</div>
+			<div>
+				<span class="col-1"><input type="checkbox" id='badge5' onclick='showBadge(this.id, 5)'>垂直輸送機</span>
+				<span class="col-1"><input type="checkbox" id='badge6' onclick='showBadge(this.id, 6)'>コンベヤメザニン</span>
+			</div>
+			<div>
+				<span class="col-1"><input type="checkbox" id='badge7' onclick='showBadge(this.id, 7)'>移動ラック</span>
+				<span class="col-1"><input type="checkbox" id='badge8' onclick='showBadge(this.id, 8)'>ドックトラベラー</span>
+			</div>
+			<input type='hidden' name='badgeValue'>
+	        
 
 		<input type='hidden' name='dataurl'>
 	    <input type='hidden' name='oldwidghtId'><br>
@@ -159,6 +185,8 @@
                 var staffid = fromjson[client_id]['staffid'];
                 var staffName = fromjson[client_id]['staffName'];
                 var workHour = fromjson[client_id]['working_hour'];
+                var restHour = fromjson[client_id]['rest_hour'];
+                var badge = fromjson[client_id]['badge'];
 
                 // 既存カードの値をセット
                 document.getElementsByName("emploee_id")[0].value = staffid;
@@ -171,8 +199,44 @@
                         } else {
                             option.selected = false;
                         }
+                    }
+                    
+                var optionRestour = document.querySelectorAll("select[name=rest_hour] option");
+                    for(var option of optionRestour) {
+                        if(option.textContent === restHour) {
+                            option.selected = true;
+                        } else {
+                            option.selected = false;
+                        }
                     }                
+                    
                 document.getElementsByName("oldwidghtId")[0].value = images[0].id;
+                
+                // バッジの表示
+                if(badge!=null){
+					document.getElementsByName("badgeValue")[0].value = badge;
+                	for(var i=0;i<8;i++){
+                		if((badge & 2**(i)) != 0){
+			                document.getElementById("badge"+(i+1)).checked=true;
+                		}
+                	}
+                }else{
+					document.getElementsByName("badgeValue")[0].value = "0";
+                	// バッジ表示欄の表示
+			        var imageBadge = new Image();
+			        imageBadge.src = './img/badge.png';
+			        imageBadge.onload = (function () {
+			            //画像ロードが完了してからキャンバスの準備をする
+			            var canvas = document.getElementById('canvasBadge');
+			            var ctx = canvas.getContext('2d');
+			            //キャンバスのサイズを画像サイズに合わせる
+			                canvas.width = imageBadge.width;
+			                canvas.height = imageBadge.height;
+			            //キャンバスに画像を描画（開始位置0,0）
+			            ctx.drawImage(imageBadge, 0, 0);
+			        });  
+                	
+                }
                 
                 var loadimage = new Image();
                 await fetch(api_uri + 's3/' + staffid + '.png' , {
@@ -223,7 +287,22 @@
             ctx.drawImage(image, 0, 0);
             // DataUrlをクリア
             document.getElementsByName('dataurl')[0].value = "";
+        });
+        
+    	// バッジ表示欄の表示
+        var imageBadge = new Image();
+        imageBadge.src = './img/badge.png';
+        imageBadge.onload = (function () {
+            //画像ロードが完了してからキャンバスの準備をする
+            var canvas = document.getElementById('canvasBadge');
+            var ctx = canvas.getContext('2d');
+            //キャンバスのサイズを画像サイズに合わせる
+                canvas.width = imageBadge.width;
+                canvas.height = imageBadge.height;
+            //キャンバスに画像を描画（開始位置0,0）
+            ctx.drawImage(imageBadge, 0, 0);
         });  
+        
     } 
 
         var obj1 = document.getElementsByName("selfile");
@@ -251,6 +330,43 @@
 	    
         
         },false);
+        
+        function showBadge(checkbox, badgeNumber){
+        
+            var checkboxobj = document.getElementById(checkbox);
+            
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+
+			var checkboxFunc;
+
+			// バッジの選択状況をビットで保持
+            var badgeValue = document.getElementsByName("badgeValue")[0].value;
+            
+            if(badgeValue==null){
+            	badgeValue = 0;
+            }
+			
+			var xpos = 110 + 37*badgeNumber + 6;
+            
+            if(checkboxobj.checked){
+            	checkboxFunc = function(){context.drawImage(image,xpos,166, 15, 15)};
+            	badgeValue = badgeValue | 2**(badgeNumber-1);
+            }else{
+                checkboxFunc = function(){clearPicture(context, xpos, 166, 15, 15)};
+                badgeValue = badgeValue & (~(2**(badgeNumber-1)));
+            }
+            
+            var image = new Image();
+            image.src = './img/badge_' + badgeNumber + '.png';
+
+			// バッジの選択状況を保持
+            document.getElementsByName("badgeValue")[0].value = badgeValue;
+
+            image.addEventListener('load', checkboxFunc, false);
+        
+        
+        }
 
 		// 文字のバイト数取得(全角を2バイトとする)
 		function getBytes(value){
@@ -268,9 +384,14 @@
 
         // Canvas内に文字を表示する
         function drawText(name, ypos, fontsize, font){
-
-            var text = document.getElementsByName(name);
-
+			var text;
+			
+			if(name === "working_hour" || name === "rest_hour"){
+				text = 	document.getElementsByName("working_hour")[0].value + "(" + document.getElementsByName("rest_hour")[0].value + ")";
+			}else{
+				text = document.getElementsByName(name)[0].value;
+			}
+			
             var canvas = document.getElementById('canvas');
             var context = canvas.getContext('2d');
 
@@ -292,17 +413,21 @@
 			
 			}
        		clearText(context, x-282, ypos - yclearpos, height);           // 範囲クリア位置調整
-
-            context.fillText(text[0].value, x, y);
+            context.fillText(text, x, y);
         }
 
         // アップロード確定時にCanvasを合成する(編集用と確定用　編集用はクリア処理が入るため)
         async function concatCanvas(){
-            const canvas = document.getElementById('canvas2');
-            const ctx = canvas.getContext("2d");
+            var canvas = document.getElementById('canvas2');
+            var ctx = await canvas.getContext("2d");
 
             const image1 = await getImagefromCanvas('canvas');
-            ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
+            await ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
+            
+            ctx = await canvas.getContext("2d");
+            const imagebadge = await getImagefromCanvas('canvasBadge');
+            await ctx.drawImage(imagebadge, 0, 0, canvas.width, canvas.height);
+            
         }
 
         // Canvasオブジェクトからイメージを取得する
@@ -420,6 +545,8 @@
 
             var emploeeName = document.getElementsByName("emploee_name")[0].value;
             var workingHour = document.getElementsByName("working_hour")[0].value;
+            var restHour = document.getElementsByName("rest_hour")[0].value;
+            var badgeValue = document.getElementsByName("badgeValue")[0].value;
 
             var dataurl = document.getElementsByName('dataurl')[0].value;
 
@@ -442,11 +569,11 @@
                 var oldwidget = await miro.board.widgets.get({id: oldid});
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
-                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue}}});
 
             }else{            
             	
-            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue}}});
             	
             	// 新規作成位置へ移動
             	var posxArray = [];
