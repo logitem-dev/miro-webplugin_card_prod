@@ -301,6 +301,7 @@
                 canvas.height = imageBadge.height;
             //キャンバスに画像を描画（開始位置0,0）
             ctx.drawImage(imageBadge, 0, 0);
+			document.getElementsByName('dataurl')[0].value = "";
         });  
         
     } 
@@ -418,7 +419,7 @@
 
         // アップロード確定時にCanvasを合成する(編集用と確定用　編集用はクリア処理が入るため)
         async function concatCanvas(){
-            var canvas = document.getElementById('canvas2');
+            var canvas = await document.getElementById('canvas2');
             var ctx = await canvas.getContext("2d");
 
             const image1 = await getImagefromCanvas('canvas');
