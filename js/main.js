@@ -11,7 +11,7 @@ miro.onReady(() => {
         svgIcon: iconCard, 
         positionPriority: 1,
         onClick: async () => {
-			    await miro.board.ui.openModal('createsticker.html', { width: 500, height: 600 });
+			    await miro.board.ui.openModal('createsticker.html', { width: 500, height: 650 });
         },
       },
       toolbar: {
@@ -21,7 +21,7 @@ miro.onReady(() => {
         positionPriority: 1,
         onClick: async () => {
 
-			    await miro.board.ui.openModal('uploadcsv.html', { width: 300, height: 200 });
+			    await miro.board.ui.openModal('uploadAttendCsv.html', { width: 300, height: 200 });
 
 		    }
 	    }
